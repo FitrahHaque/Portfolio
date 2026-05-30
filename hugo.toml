@@ -1,4 +1,4 @@
-baseURL = "https://ihtemad.github.io/portfolio/"
+baseURL = "https://fitrahhaque.github.io/Portfolio/"
 locale = "en-us"
 title = "Asif Haque"
 publishDir = "dist"
