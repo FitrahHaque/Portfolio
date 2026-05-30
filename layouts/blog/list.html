@@ -1,0 +1,21 @@
+{{ define "main" }}
+<article class="page-view">
+  <a class="crumb" href="{{ site.Home.RelPermalink }}">Home</a>
+  {{ partial "section-heading.html" (dict "eyebrow" "Writing" "title" .Title) }}
+
+  <div class="entry-list">
+    {{ range .Pages.ByDate.Reverse }}
+      <article class="entry">
+        <div class="entry-date">{{ .Date.Format "2006.01.02" }}</div>
+        <div class="entry-body">
+          <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
+          <p>{{ with .Params.summary }}{{ . }}{{ else }}{{ .Summary | plainify }}{{ end }}</p>
+          {{ with .Params.tags }}
+            {{ partial "tags.html" . }}
+          {{ end }}
+        </div>
+      </article>
+    {{ end }}
+  </div>
+</article>
+{{ end }}

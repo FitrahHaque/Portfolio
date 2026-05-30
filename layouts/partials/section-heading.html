@@ -1,0 +1,15 @@
+{{ $title := .title }}
+{{ $eyebrow := .eyebrow }}
+{{ $page := .page }}
+<header class="section-heading">
+  <p class="eyebrow">{{ $eyebrow }}</p>
+  {{ if $page }}
+    <h2>
+      <a class="section-title-link" href="{{ printf "%s/" $page | relURL }}" aria-label="Open {{ $title }} page">
+        {{ $title }} <span aria-hidden="true">↗</span>
+      </a>
+    </h2>
+  {{ else }}
+    <h2>{{ $title }}</h2>
+  {{ end }}
+</header>

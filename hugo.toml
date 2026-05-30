@@ -1,0 +1,20 @@
+baseURL = "https://ihtemad.github.io/portfolio/"
+locale = "en-us"
+title = "Asif Haque"
+publishDir = "dist"
+staticDir = ["public"]
+disableKinds = ["taxonomy", "term", "RSS"]
+enableRobotsTXT = true
+
+[params]
+  description = "Software engineer and research student focused on machine learning, AI, and environmental embeddings for crop performance prediction."
+  author = "Asif Haque"
+  image = "og-image.svg"
+
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = false
+
+[minify]
+  minifyOutput = true

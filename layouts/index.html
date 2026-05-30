@@ -1,0 +1,160 @@
+{{ define "main" }}
+{{ $data := hugo.Data.site }}
+{{ $profile := $data.profile }}
+{{ $hasEmail := gt (len $profile.email) 0 }}
+
+<section id="home" class="hero-section" aria-label="Introduction">
+  <div class="hero-copy">
+    <p class="eyebrow">{{ $profile.role }}</p>
+    <div class="hero-identity">
+      <img class="hero-mark" src="{{ $profile.photo | relURL }}" width="72" height="72" alt="Portrait mark for {{ $profile.name }}">
+      <h1 class="type-loop" aria-label="{{ $profile.name }}">
+        <span data-type-loop data-type-text="{{ $profile.name }}" aria-hidden="true">{{ $profile.name }}</span>
+      </h1>
+    </div>
+    <p class="lead">
+      {{ $profile.tagline }}
+      <a class="read-more-link" href="{{ "about/" | relURL }}" aria-label="Learn more about {{ $profile.name }}">
+        Learn more about me here <span aria-hidden="true">↗</span>
+      </a>
+    </p>
+    <div class="hero-actions" aria-label="Primary links">
+      <a class="text-action" href="{{ $profile.resumeUrl | relURL }}">
+        {{ partial "icon.html" "download" }}
+        Resume
+      </a>
+      {{ range $profile.socials }}
+        {{ $external := or (hasPrefix .href "http://") (hasPrefix .href "https://") }}
+        <a class="text-action" href="{{ .href }}"{{ if $external }} target="_blank" rel="noreferrer noopener"{{ end }}>
+          {{ partial "icon.html" .icon }}
+          {{ .label }}
+        </a>
+      {{ end }}
+    </div>
+  </div>
+  <aside class="hero-panel" aria-label="Profile summary">
+    <dl>
+      {{ range $data.heroFacts }}
+        <div>
+          <dt>{{ .label }}</dt>
+          <dd>{{ .value }}</dd>
+        </div>
+      {{ end }}
+    </dl>
+  </aside>
+</section>
+
+<section id="research" class="content-section">
+  {{ partial "section-heading.html" (dict "eyebrow" "Focus and publications" "title" "Research" "page" "research") }}
+  {{ range $data.research }}
+    <article class="entry">
+      <div class="entry-date">{{ .year }}</div>
+      <div class="entry-body">
+        <h3>{{ .title }}</h3>
+        <p class="entry-meta">{{ .authors }} / {{ .venue }}</p>
+        <p>{{ .summary }}</p>
+        {{ partial "tags.html" .tags }}
+        {{ partial "entry-links.html" .links }}
+      </div>
+    </article>
+  {{ end }}
+</section>
+
+<section id="projects" class="content-section">
+  {{ partial "section-heading.html" (dict "eyebrow" "Selected work" "title" "Projects" "page" "projects") }}
+  {{ range $data.projects }}
+    <article class="entry">
+      <div class="entry-date">{{ if .featured }}Featured{{ else }}Project{{ end }}</div>
+      <div class="entry-body">
+        <h3>{{ .title }}</h3>
+        <p>{{ .description }}</p>
+        {{ with .stack }}
+          <p class="stack-line">{{ delimit . " / " }}</p>
+        {{ end }}
+        {{ partial "tags.html" .tags }}
+        {{ partial "entry-links.html" .links }}
+      </div>
+    </article>
+  {{ end }}
+</section>
+
+<section id="blog" class="content-section">
+  {{ partial "section-heading.html" (dict "eyebrow" "Recent notes" "title" "Blog" "page" "blog") }}
+  {{ $posts := first 2 (where .Site.RegularPages.ByDate.Reverse "Section" "blog") }}
+  {{ range $posts }}
+    <article class="entry">
+      <div class="entry-date">{{ .Date.Format "2006.01.02" }}</div>
+      <div class="entry-body">
+        <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
+        <p>{{ with .Params.summary }}{{ . }}{{ else }}{{ .Summary | plainify }}{{ end }}</p>
+        {{ with .Params.tags }}
+          {{ partial "tags.html" . }}
+        {{ end }}
+      </div>
+    </article>
+  {{ end }}
+</section>
+
+<section id="experience" class="content-section">
+  {{ partial "section-heading.html" (dict "eyebrow" "Work and research" "title" "Experience" "page" "experience") }}
+  {{ range $data.experience }}
+    <article class="entry">
+      <div class="entry-date">{{ .start }} - {{ .end }}</div>
+      <div class="entry-body">
+        <h3>{{ .role }} <span>/ {{ .company }}</span></h3>
+        {{ with .location }}<p class="entry-meta">{{ . }}</p>{{ end }}
+        <ul class="detail-list">
+          {{ range .bullets }}
+            <li>{{ . }}</li>
+          {{ end }}
+        </ul>
+        {{ partial "tags.html" .tags }}
+      </div>
+    </article>
+  {{ end }}
+</section>
+
+<section id="skills" class="content-section">
+  {{ partial "section-heading.html" (dict "eyebrow" "Tools and technologies" "title" "Skills" "page" "skills") }}
+  {{ range $data.skills }}
+    <div class="skill-row">
+      <h3>{{ .category }}</h3>
+      <p>{{ delimit .items " / " }}</p>
+    </div>
+  {{ end }}
+</section>
+
+<section id="education" class="content-section">
+  {{ partial "section-heading.html" (dict "eyebrow" "Academic background" "title" "Education" "page" "education") }}
+  {{ range $data.education }}
+    <article class="entry">
+      <div class="entry-date">{{ .start }} - {{ .end }}</div>
+      <div class="entry-body">
+        <h3>{{ .degree }} <span>/ {{ .institution }}</span></h3>
+        {{ with .location }}<p class="entry-meta">{{ . }}</p>{{ end }}
+        <ul class="detail-list">
+          {{ range .details }}
+            <li>{{ . }}</li>
+          {{ end }}
+        </ul>
+      </div>
+    </article>
+  {{ end }}
+</section>
+
+<section id="contact" class="content-section contact-section">
+  {{ partial "section-heading.html" (dict "eyebrow" "Contact" "title" "Get in touch" "page" "contact") }}
+  <p>Open to research collaborations, graduate opportunities, and software engineering roles.</p>
+  {{ if $hasEmail }}
+    <a class="text-action" href="mailto:{{ $profile.email }}">
+      {{ partial "icon.html" "mail" }}
+      {{ $profile.email }}
+    </a>
+  {{ else }}
+    <a class="text-action" href="{{ $profile.resumeUrl | relURL }}">
+      {{ partial "icon.html" "download" }}
+      Resume
+    </a>
+  {{ end }}
+</section>
+{{ end }}

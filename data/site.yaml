@@ -1,0 +1,217 @@
+profile:
+  name: Asif Haque
+  initials: AH
+  role: Software Engineer & Research Student
+  photo: profile.svg
+  tagline: Software engineer and research student working at the intersection of machine learning and AI. My research focuses on optimizing future environmental embedding representations for crop performance prediction.
+  location: Research and engineering opportunities
+  email: ""
+  resumeUrl: resume.pdf
+  socials:
+    - label: GitHub
+      href: https://github.com/ihtemad
+      icon: github
+
+nav:
+  - id: about
+    label: About
+  - id: research
+    label: Research
+  - id: projects
+    label: Projects
+  - id: blog
+    label: Blogs
+
+heroFacts:
+  - label: Current
+    value: Future environment signals
+  - label: Research
+    value: Crop performance prediction
+  - label: Build
+    value: ML tooling and data systems
+  - label: Notes
+    value: Experiments, models, results
+
+about:
+  heading: About
+  paragraphs:
+    - I am a software engineer and research student focused on machine learning and artificial intelligence. I care about building correct, maintainable systems and applying ML to problems that have real-world impact.
+    - My current research investigates how learned environmental embeddings can improve crop performance prediction. I enjoy bridging rigorous research with practical software engineering by turning models and ideas into reliable, well-tested tools.
+    - I value clear writing, reproducible experiments, and clean code. I am comfortable across the stack, from data pipelines and model training to the interfaces that make results usable.
+  highlights:
+    - label: Focus
+      value: ML / AI
+    - label: Research
+      value: Environmental embeddings
+    - label: Engineering
+      value: Full-stack systems
+    - label: Approach
+      value: Reproducible work
+
+research:
+  - title: Optimizing Future Environmental Embedding Representations for Crop Performance
+    venue: Ongoing research
+    year: "2025"
+    authors: Asif Haque
+    summary: This work explores how to learn and optimize representations of future environmental conditions, such as climate and soil signals, so that machine learning models can more accurately predict crop performance. The goal is to design embeddings that generalize across regions and seasons, improving forecasting under shifting conditions and supporting data-driven agricultural decisions.
+    tags:
+      - Machine Learning
+      - AI
+      - Environmental Embeddings
+      - Crop Prediction
+    links:
+      - label: Paper
+        href: https://github.com/ihtemad
+      - label: Code
+        href: https://github.com/ihtemad
+  - title: Research updates and publications
+    venue: In progress
+    year: Upcoming
+    authors: Asif Haque
+    summary: A short space for thesis chapters, preprints, datasets, code, and research notes as they become available.
+    tags:
+      - Publications
+      - Thesis
+      - Preprints
+    links:
+      - label: Code
+        href: https://github.com/ihtemad
+
+projects:
+  - title: Crop Embedding Toolkit
+    description: A research toolkit for training and evaluating environmental embeddings used in crop performance prediction, with reproducible experiment configs.
+    stack:
+      - Python
+      - PyTorch
+      - Pandas
+      - scikit-learn
+    tags:
+      - Research
+      - Machine Learning
+    featured: true
+    links:
+      - label: Code
+        href: https://github.com/ihtemad
+  - title: Environmental Data Pipeline
+    description: An ETL pipeline that ingests, cleans, and aligns multi-source environmental and yield data into analysis-ready datasets.
+    stack:
+      - Python
+      - DuckDB
+      - Polars
+      - Airflow
+    tags:
+      - Data Engineering
+      - Pipelines
+    featured: true
+    links:
+      - label: Code
+        href: https://github.com/ihtemad
+  - title: Model Results Dashboard
+    description: A lightweight web dashboard for visualizing model metrics, predictions, and embedding spaces during research iterations.
+    stack:
+      - React
+      - TypeScript
+      - Vite
+      - Tailwind CSS
+    tags:
+      - Web App
+      - Data Viz
+    links:
+      - label: Code
+        href: https://github.com/ihtemad
+      - label: Demo
+        href: https://github.com/ihtemad
+  - title: Experiment Tracker CLI
+    description: A small command-line tool to log, compare, and reproduce ML experiments with deterministic seeds and config snapshots.
+    stack:
+      - Python
+      - Typer
+      - SQLite
+    tags:
+      - CLI
+      - Tooling
+    links:
+      - label: Code
+        href: https://github.com/ihtemad
+
+experience:
+  - role: Research Student
+    company: University Research Lab
+    location: ""
+    start: "2024"
+    end: Present
+    bullets:
+      - Conducting research on future environmental embedding representations for crop performance prediction.
+      - Designing reproducible ML experiments and evaluating model generalization across regions and seasons.
+      - Building data pipelines and tooling to support large-scale environmental datasets.
+    tags:
+      - Python
+      - PyTorch
+      - Research
+  - role: Software Engineer
+    company: Selected engineering work
+    location: ""
+    start: "2022"
+    end: "2024"
+    bullets:
+      - Developed and maintained production software with an emphasis on reliability and testing.
+      - Collaborated across teams to ship features and improve developer tooling.
+      - Contributed to code reviews, documentation, and engineering standards.
+    tags:
+      - TypeScript
+      - React
+      - Node.js
+
+skills:
+  - category: Languages
+    items:
+      - Python
+      - TypeScript
+      - JavaScript
+      - SQL
+      - C++
+  - category: Frameworks
+    items:
+      - React
+      - Node.js
+      - FastAPI
+      - Vite
+      - Tailwind CSS
+  - category: ML / AI
+    items:
+      - PyTorch
+      - scikit-learn
+      - NumPy
+      - Hugging Face
+      - XGBoost
+  - category: Data
+    items:
+      - Pandas
+      - Polars
+      - DuckDB
+      - PostgreSQL
+      - Jupyter
+  - category: Developer Tools
+    items:
+      - Git
+      - Docker
+      - Linux
+      - GitHub Actions
+      - VS Code
+
+education:
+  - degree: Degree / Program
+    institution: University
+    location: ""
+    start: "2023"
+    end: Present
+    details:
+      - "Research focus: machine learning for environmental and agricultural prediction."
+      - "Thesis: optimizing future environmental embedding representations for crop performance."
+  - degree: B.Sc. in Computer Science
+    institution: University
+    location: ""
+    start: "2019"
+    end: "2023"
+    details:
+      - Coursework in algorithms, machine learning, and software engineering.

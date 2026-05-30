@@ -1,0 +1,16 @@
+{{ $data := hugo.Data.site }}
+{{ $profile := $data.profile }}
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="{{ site.Home.RelPermalink }}" aria-label="{{ $profile.name }} home">
+      <span class="brand-name cursor-name">{{ $profile.name }}</span>
+    </a>
+
+    <nav class="top-nav" aria-label="Primary navigation">
+      {{ range $data.nav }}
+        <a href="{{ printf "%s/" .id | relURL }}">{{ .label }}</a>
+      {{ end }}
+    </nav>
+
+  </div>
+</header>

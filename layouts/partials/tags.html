@@ -1,0 +1,7 @@
+{{ with . }}
+  <ul class="tag-list" aria-label="Tags">
+    {{ range . }}
+      <li>{{ . }}</li>
+    {{ end }}
+  </ul>
+{{ end }}

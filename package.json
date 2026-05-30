@@ -1,0 +1,11 @@
+{
+  "name": "portfolio",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Personal portfolio website built with Hugo.",
+  "scripts": {
+    "dev": "hugo server --disableFastRender",
+    "build": "hugo --gc --minify",
+    "preview": "hugo server --disableFastRender --renderToDisk"
+  }
+}

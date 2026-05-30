@@ -1,0 +1,126 @@
+{{ define "main" }}
+{{ $data := hugo.Data.site }}
+{{ $profile := $data.profile }}
+{{ $key := .Params.sectionKey }}
+{{ $hasEmail := gt (len $profile.email) 0 }}
+
+<div class="page-layout">
+  <aside class="page-toc" data-page-toc hidden>
+    <p class="page-toc-title">On this page</p>
+    <nav class="page-toc-nav" data-toc aria-label="{{ .Title }} contents"></nav>
+  </aside>
+  <article class="page-view" data-toc-content>
+  <a class="crumb" href="{{ site.Home.RelPermalink }}">Home</a>
+  {{ partial "section-heading.html" (dict "eyebrow" .Params.eyebrow "title" .Title) }}
+
+  {{ if eq $key "about" }}
+    <div class="about-grid">
+      <div class="prose">
+        {{ range $data.about.paragraphs }}
+          <p>{{ . }}</p>
+        {{ end }}
+      </div>
+      <dl class="highlights">
+        {{ range $data.about.highlights }}
+          <div>
+            <dt>{{ .label }}</dt>
+            <dd>{{ .value }}</dd>
+          </div>
+        {{ end }}
+      </dl>
+    </div>
+  {{ else if eq $key "research" }}
+    <div class="entry-list">
+      {{ range $data.research }}
+        <article class="entry">
+          <div class="entry-date">{{ .year }}</div>
+          <div class="entry-body">
+            <h3>{{ .title }}</h3>
+            <p class="entry-meta">{{ .authors }} / {{ .venue }}</p>
+            <p>{{ .summary }}</p>
+            {{ partial "tags.html" .tags }}
+            {{ partial "entry-links.html" .links }}
+          </div>
+        </article>
+      {{ end }}
+    </div>
+  {{ else if eq $key "projects" }}
+    <div class="entry-list">
+      {{ range $data.projects }}
+        <article class="entry">
+          <div class="entry-date">{{ if .featured }}Featured{{ else }}Project{{ end }}</div>
+          <div class="entry-body">
+            <h3>{{ .title }}</h3>
+            <p>{{ .description }}</p>
+            {{ with .stack }}
+              <p class="stack-line">{{ delimit . " / " }}</p>
+            {{ end }}
+            {{ partial "tags.html" .tags }}
+            {{ partial "entry-links.html" .links }}
+          </div>
+        </article>
+      {{ end }}
+    </div>
+  {{ else if eq $key "experience" }}
+    <div class="entry-list">
+      {{ range $data.experience }}
+        <article class="entry">
+          <div class="entry-date">{{ .start }} - {{ .end }}</div>
+          <div class="entry-body">
+            <h3>{{ .role }} <span>/ {{ .company }}</span></h3>
+            {{ with .location }}<p class="entry-meta">{{ . }}</p>{{ end }}
+            <ul class="detail-list">
+              {{ range .bullets }}
+                <li>{{ . }}</li>
+              {{ end }}
+            </ul>
+            {{ partial "tags.html" .tags }}
+          </div>
+        </article>
+      {{ end }}
+    </div>
+  {{ else if eq $key "skills" }}
+    <div class="skill-list">
+      {{ range $data.skills }}
+        <div class="skill-row">
+          <h3>{{ .category }}</h3>
+          <p>{{ delimit .items " / " }}</p>
+        </div>
+      {{ end }}
+    </div>
+  {{ else if eq $key "education" }}
+    <div class="entry-list">
+      {{ range $data.education }}
+        <article class="entry">
+          <div class="entry-date">{{ .start }} - {{ .end }}</div>
+          <div class="entry-body">
+            <h3>{{ .degree }} <span>/ {{ .institution }}</span></h3>
+            {{ with .location }}<p class="entry-meta">{{ . }}</p>{{ end }}
+            <ul class="detail-list">
+              {{ range .details }}
+                <li>{{ . }}</li>
+              {{ end }}
+            </ul>
+          </div>
+        </article>
+      {{ end }}
+    </div>
+  {{ else if eq $key "contact" }}
+    <div class="contact-row">
+      <p>Open to research collaborations, graduate opportunities, and software engineering roles.</p>
+      {{ if $hasEmail }}
+        <a class="text-action" href="mailto:{{ $profile.email }}">
+          {{ partial "icon.html" "mail" }}
+          {{ $profile.email }}
+        </a>
+      {{ else }}
+        <a class="text-action" href="{{ $profile.resumeUrl | relURL }}">
+          {{ partial "icon.html" "download" }}
+          Resume
+        </a>
+      {{ end }}
+    </div>
+  {{ end }}
+  </article>
+</div>
+{{ end }}

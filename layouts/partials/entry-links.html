@@ -1,0 +1,8 @@
+{{ with . }}
+  <div class="entry-links">
+    {{ range . }}
+      {{ $external := or (hasPrefix .href "http://") (hasPrefix .href "https://") }}
+      <a href="{{ .href }}"{{ if $external }} target="_blank" rel="noreferrer noopener"{{ end }}>{{ .label }}</a>
+    {{ end }}
+  </div>
+{{ end }}
