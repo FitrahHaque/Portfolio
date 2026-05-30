@@ -39,6 +39,8 @@ Run the site:
 hugo server --disableFastRender
 ```
 
+Open `http://localhost:1313/Portfolio/`. The `/Portfolio/` path matches the GitHub Pages repository path and is case-sensitive.
+
 Build production output:
 
 ```bash

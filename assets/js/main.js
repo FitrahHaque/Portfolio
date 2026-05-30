@@ -99,7 +99,8 @@
       }
       used.add(id);
       heading.id = id;
-      heading.classList.add("toc-target");
+      const target = heading.closest(".entry, .skill-row") || heading;
+      target.classList.add("toc-target");
 
       const link = document.createElement("a");
       link.className = "page-toc-link";
@@ -108,7 +109,7 @@
       link.title = label;
       nav.appendChild(link);
 
-      return { heading, link };
+      return { heading, target, link };
     });
 
     const aside = nav.closest("[data-page-toc]");
@@ -122,7 +123,19 @@
       activeLink = link;
     };
 
-    const offset = 110;
+    const getTopOffset = () => {
+      const topbar = document.querySelector(".topbar");
+      return (topbar ? topbar.offsetHeight : 0) + 4;
+    };
+
+    const snapToTarget = (target) => {
+      const targetY = Math.max(
+        0,
+        window.scrollY + target.getBoundingClientRect().top - getTopOffset()
+      );
+      window.scrollTo({ top: targetY, behavior: "smooth" });
+    };
+
     let lockUntil = 0;
     const updateActive = () => {
       if (Date.now() < lockUntil) return;
@@ -134,8 +147,9 @@
       }
 
       let current = links[0];
+      const offset = getTopOffset() + 2;
       for (const item of links) {
-        if (item.heading.getBoundingClientRect().top - offset <= 0) {
+        if (item.target.getBoundingClientRect().top - offset <= 0) {
           current = item;
         } else {
           break;
@@ -144,20 +158,13 @@
       setActive(current.link);
     };
 
-    const topbar = document.querySelector(".topbar");
-    links.forEach(({ heading, link }) => {
+    links.forEach(({ heading, target, link }) => {
       link.addEventListener("click", (event) => {
         event.preventDefault();
-        const gap = 18;
-        const topOffset = (topbar ? topbar.offsetHeight : 0) + gap;
-        const targetY = Math.max(
-          0,
-          window.scrollY + heading.getBoundingClientRect().top - topOffset
-        );
-
         setActive(link);
         lockUntil = Date.now() + 700;
-        window.scrollTo({ top: targetY, behavior: "smooth" });
+        ensureScrollRoom();
+        snapToTarget(target);
 
         if (history.replaceState) {
           history.replaceState(null, "", `#${heading.id}`);
@@ -166,24 +173,20 @@
     });
 
     const spacer = document.createElement("div");
+    spacer.className = "toc-scroll-spacer";
     spacer.setAttribute("aria-hidden", "true");
-    spacer.style.width = "100%";
-    spacer.style.flex = "0 0 auto";
-    const shell = content.closest(".content-shell") || content.parentElement;
-    const footer = shell.querySelector(".site-footer");
-    if (footer) {
-      shell.insertBefore(spacer, footer);
-    } else {
-      shell.appendChild(spacer);
-    }
+    content.appendChild(spacer);
 
     const ensureScrollRoom = () => {
       spacer.style.height = "0px";
-      const last = links[links.length - 1].heading;
-      const topOffset = (topbar ? topbar.offsetHeight : 0) + 18;
-      const lastTop = window.scrollY + last.getBoundingClientRect().top;
-      const needed = lastTop - topOffset + window.innerHeight;
-      const extra = needed - document.documentElement.scrollHeight;
+      const last = links[links.length - 1].target;
+      const targetY = Math.max(
+        0,
+        window.scrollY + last.getBoundingClientRect().top - getTopOffset()
+      );
+      const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+      const buffer = Math.max(96, window.innerHeight * 0.18);
+      const extra = targetY - maxScroll + buffer;
       spacer.style.height = extra > 0 ? `${Math.ceil(extra)}px` : "0px";
     };
 
@@ -207,6 +210,23 @@
     window.addEventListener("load", onResize);
     ensureScrollRoom();
     updateActive();
+
+    window.requestAnimationFrame(() => {
+      ensureScrollRoom();
+      updateActive();
+    });
+    window.setTimeout(onResize, 250);
+
+    if (window.location.hash) {
+      const hashTarget = links.find(({ heading }) => `#${heading.id}` === window.location.hash);
+      if (hashTarget) {
+        window.setTimeout(() => {
+          ensureScrollRoom();
+          snapToTarget(hashTarget.target);
+          setActive(hashTarget.link);
+        }, 80);
+      }
+    }
   };
 
   const init = () => {

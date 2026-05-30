@@ -494,6 +494,11 @@ h3 span {
   scroll-margin-top: 5.25rem;
 }
 
+.toc-scroll-spacer {
+  width: 100%;
+  pointer-events: none;
+}
+
 .section-heading {
   display: grid;
   grid-template-columns: 8.25rem minmax(0, 1fr);
