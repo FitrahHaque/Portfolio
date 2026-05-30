@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#0b1417" />
+  <path d="M0 0h1200v630" fill="none" stroke="#15252b" stroke-width="32"/>
+  <path d="M0 0h360v630H0z" fill="#111d22" />
+  <path d="M42 108h276M42 228h276M102 48v300M258 48v300" stroke="#24363d" stroke-width="2"/>
+  <rect x="74" y="74" width="212" height="212" rx="18" fill="none" stroke="#3c535c" stroke-width="2" />
+  <text x="180" y="198" text-anchor="middle" font-family="IBM Plex Sans, system-ui, sans-serif" font-size="64" font-weight="700" fill="#e6edf0">AH</text>
+  <line x1="94" y1="264" x2="266" y2="264" stroke="#92d8e7" stroke-width="4" stroke-linecap="round" />
+  <text x="80" y="300" font-family="Inter, system-ui, sans-serif" font-size="76"
+    font-weight="700" fill="#e6edf0">Asif Haque</text>
+  <text x="80" y="372" font-family="IBM Plex Mono, ui-monospace, SFMono-Regular, monospace" font-size="28"
+    fill="#9dafb6">Software Engineer &amp; Research Student</text>
+  <text x="430" y="292" font-family="IBM Plex Sans, system-ui, sans-serif" font-size="32"
+    fill="#92d8e7">Machine Learning / AI / Environmental Embeddings</text>
+  <text x="430" y="360" font-family="IBM Plex Sans, system-ui, sans-serif" font-size="24"
+    fill="#9dafb6">Crop performance prediction and practical research systems.</text>
+</svg>

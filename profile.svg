@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 288 288" width="288" height="288" role="img" aria-label="Asif Haque monogram">
+  <rect width="288" height="288" rx="26" fill="#111d22"/>
+  <path d="M24 65h240M24 223h240M65 24v240M223 24v240" stroke="#24363d" stroke-width="2"/>
+  <rect x="33" y="33" width="222" height="222" rx="18" fill="none" stroke="#3c535c" stroke-width="2"/>
+  <path d="M64 184 116 92h17l52 92h-22l-11-21h-56l-11 21H64Zm42-39h37l-18-36-19 36Zm93 39V92h21v37h34V92h21v92h-21v-37h-34v37h-21Z" fill="#e6edf0"/>
+  <path d="M65 210h158" stroke="#92d8e7" stroke-width="3" stroke-linecap="round"/>
+</svg>
