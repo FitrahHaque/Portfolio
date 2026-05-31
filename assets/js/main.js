@@ -38,7 +38,7 @@
           deleting = true;
           isFirstTypeOut = false;
           render();
-          window.setTimeout(tick, 1500);
+          window.setTimeout(tick, 2000);
           return;
         }
 
@@ -47,32 +47,32 @@
           if (visibleCount <= 0) {
             visibleCount = 0;
             deleting = false;
-            render();
-            window.setTimeout(tick, 160);
-            return;
-          }
-
           render();
-          window.setTimeout(tick, 42);
-          return;
-        }
-
-        visibleCount += 1;
-        if (visibleCount >= text.length) {
-          visibleCount = text.length;
-          deleting = true;
-          isFirstTypeOut = false;
-          render();
-          window.setTimeout(tick, 1500);
+          window.setTimeout(tick, 220);
           return;
         }
 
         render();
-        window.setTimeout(tick, 52);
-      };
+        window.setTimeout(tick, 56);
+        return;
+      }
+
+      visibleCount += 1;
+      if (visibleCount >= text.length) {
+        visibleCount = text.length;
+        deleting = true;
+        isFirstTypeOut = false;
+        render();
+        window.setTimeout(tick, 2000);
+        return;
+      }
 
       render();
-      window.setTimeout(tick, 420);
+      window.setTimeout(tick, 68);
+    };
+
+    render();
+    window.setTimeout(tick, 560);
     });
   };
 
@@ -84,7 +84,7 @@
       cursors.forEach((cursor) => {
         cursor.classList.toggle("cursor-hidden");
       });
-    }, 420);
+    }, 560);
   };
 
   const initCopyEmail = () => {
