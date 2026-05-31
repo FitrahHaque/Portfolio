@@ -29,38 +29,6 @@
         {{ end }}
       </dl>
     </div>
-  {{ else if eq $key "research" }}
-    <div class="entry-list">
-      {{ range $data.research }}
-        <article class="entry">
-          <div class="entry-date">{{ .year }}</div>
-          <div class="entry-body">
-            <h3>{{ .title }}</h3>
-            <p class="entry-meta">{{ .authors }} / {{ .venue }}</p>
-            <p>{{ .summary }}</p>
-            {{ partial "tags.html" .tags }}
-            {{ partial "entry-links.html" .links }}
-          </div>
-        </article>
-      {{ end }}
-    </div>
-  {{ else if eq $key "projects" }}
-    <div class="entry-list">
-      {{ range $data.projects }}
-        <article class="entry">
-          <div class="entry-date">{{ if .featured }}Featured{{ else }}Project{{ end }}</div>
-          <div class="entry-body">
-            <h3>{{ .title }}</h3>
-            <p>{{ .description }}</p>
-            {{ with .stack }}
-              <p class="stack-line">{{ delimit . " / " }}</p>
-            {{ end }}
-            {{ partial "tags.html" .tags }}
-            {{ partial "entry-links.html" .links }}
-          </div>
-        </article>
-      {{ end }}
-    </div>
   {{ else if eq $key "experience" }}
     <div class="entry-list">
       {{ range $data.experience }}

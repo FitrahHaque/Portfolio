@@ -1,0 +1,47 @@
+{{ $page := .page }}
+{{ $section := .section | default $page.Section }}
+{{ $summary := $page.Params.summary | default ($page.Summary | plainify) }}
+{{ $showArrow := .showArrow }}
+
+<article class="entry entry-clickable" data-entry-link="{{ $page.RelPermalink }}">
+  {{ if eq $section "research" }}
+    <div class="entry-date">{{ with $page.Params.year }}{{ . }}{{ else }}{{ $page.Date.Format "2006" }}{{ end }}</div>
+    <div class="entry-body">
+      <h3><a href="{{ $page.RelPermalink }}">{{ $page.Title }}{{ if $showArrow }} <span class="entry-title-arrow" aria-hidden="true">↗</span>{{ end }}</a></h3>
+      {{ if or $page.Params.authors $page.Params.venue }}
+        <p class="entry-meta">{{ with $page.Params.authors }}{{ . }}{{ end }}{{ if and $page.Params.authors $page.Params.venue }} / {{ end }}{{ with $page.Params.venue }}{{ . }}{{ end }}</p>
+      {{ end }}
+      {{ with $summary }}<p>{{ . }}</p>{{ end }}
+      {{ with $page.Params.tags }}
+        {{ partial "tags.html" . }}
+      {{ end }}
+      {{ with $page.Params.links }}
+        {{ partial "entry-links.html" . }}
+      {{ end }}
+    </div>
+  {{ else if eq $section "projects" }}
+    <div class="entry-date">{{ if $page.Params.featured }}Featured{{ else }}Project{{ end }}</div>
+    <div class="entry-body">
+      <h3><a href="{{ $page.RelPermalink }}">{{ $page.Title }}{{ if $showArrow }} <span class="entry-title-arrow" aria-hidden="true">↗</span>{{ end }}</a></h3>
+      {{ with $summary }}<p>{{ . }}</p>{{ end }}
+      {{ with $page.Params.stack }}
+        <p class="stack-line">{{ delimit . " / " }}</p>
+      {{ end }}
+      {{ with $page.Params.tags }}
+        {{ partial "tags.html" . }}
+      {{ end }}
+      {{ with $page.Params.links }}
+        {{ partial "entry-links.html" . }}
+      {{ end }}
+    </div>
+  {{ else }}
+    <div class="entry-date">{{ $page.Date.Format "2006.01.02" }}</div>
+    <div class="entry-body">
+      <h3><a href="{{ $page.RelPermalink }}">{{ $page.Title }}{{ if $showArrow }} <span class="entry-title-arrow" aria-hidden="true">↗</span>{{ end }}</a></h3>
+      {{ with $summary }}<p>{{ . }}</p>{{ end }}
+      {{ with $page.Params.tags }}
+        {{ partial "tags.html" . }}
+      {{ end }}
+    </div>
+  {{ end }}
+</article>

@@ -6,11 +6,13 @@
   </aside>
   <article class="page-view" data-toc-content>
     <a class="crumb" href="{{ site.Home.RelPermalink }}">Home</a>
-    {{ partial "section-heading.html" (dict "eyebrow" "Writing" "title" .Title) }}
-
+    {{ partial "section-heading.html" (dict "eyebrow" .Params.eyebrow "title" .Title) }}
+    {{ with .Content }}
+      <div class="prose">{{ . }}</div>
+    {{ end }}
     <div class="entry-list">
-      {{ range .RegularPages.ByDate.Reverse }}
-        {{ partial "entry-card.html" (dict "page" . "section" "blog" "showArrow" true) }}
+      {{ range .RegularPages.ByWeight }}
+        {{ partial "entry-card.html" (dict "page" . "section" "research" "showArrow" true) }}
       {{ end }}
     </div>
   </article>

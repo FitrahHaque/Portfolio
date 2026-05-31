@@ -48,53 +48,29 @@
 
 <section id="research" class="content-section">
   {{ partial "section-heading.html" (dict "eyebrow" "Focus and publications" "title" "Research" "page" "research") }}
-  {{ range $data.research }}
-    <article class="entry">
-      <div class="entry-date">{{ .year }}</div>
-      <div class="entry-body">
-        <h3>{{ .title }}</h3>
-        <p class="entry-meta">{{ .authors }} / {{ .venue }}</p>
-        <p>{{ .summary }}</p>
-        {{ partial "tags.html" .tags }}
-        {{ partial "entry-links.html" .links }}
-      </div>
-    </article>
-  {{ end }}
+  <div class="entry-list" aria-label="Research items">
+    {{ range (where .Site.RegularPages "Section" "research").ByWeight }}
+      {{ partial "entry-card.html" (dict "page" . "section" "research") }}
+    {{ end }}
+  </div>
 </section>
 
 <section id="projects" class="content-section">
   {{ partial "section-heading.html" (dict "eyebrow" "Selected work" "title" "Projects" "page" "projects") }}
-  {{ range $data.projects }}
-    <article class="entry">
-      <div class="entry-date">{{ if .featured }}Featured{{ else }}Project{{ end }}</div>
-      <div class="entry-body">
-        <h3>{{ .title }}</h3>
-        <p>{{ .description }}</p>
-        {{ with .stack }}
-          <p class="stack-line">{{ delimit . " / " }}</p>
-        {{ end }}
-        {{ partial "tags.html" .tags }}
-        {{ partial "entry-links.html" .links }}
-      </div>
-    </article>
-  {{ end }}
+  <div class="entry-list" aria-label="Project items">
+    {{ range (where .Site.RegularPages "Section" "projects").ByWeight }}
+      {{ partial "entry-card.html" (dict "page" . "section" "projects") }}
+    {{ end }}
+  </div>
 </section>
 
 <section id="blog" class="content-section">
   {{ partial "section-heading.html" (dict "eyebrow" "Recent notes" "title" "Blog" "page" "blog") }}
-  {{ $posts := first 2 (where .Site.RegularPages.ByDate.Reverse "Section" "blog") }}
-  {{ range $posts }}
-    <article class="entry">
-      <div class="entry-date">{{ .Date.Format "2006.01.02" }}</div>
-      <div class="entry-body">
-        <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
-        <p>{{ with .Params.summary }}{{ . }}{{ else }}{{ .Summary | plainify }}{{ end }}</p>
-        {{ with .Params.tags }}
-          {{ partial "tags.html" . }}
-        {{ end }}
-      </div>
-    </article>
-  {{ end }}
+  <div class="entry-list" aria-label="Blog posts">
+    {{ range (where .Site.RegularPages "Section" "blog").ByDate.Reverse }}
+      {{ partial "entry-card.html" (dict "page" . "section" "blog") }}
+    {{ end }}
+  </div>
 </section>
 
 <section id="experience" class="content-section">

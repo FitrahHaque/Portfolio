@@ -1,5 +1,8 @@
 {{ $data := hugo.Data.site }}
 {{ $profile := $data.profile }}
+{{ $currentSection := .Section }}
+{{ $currentKey := $currentSection | default .Params.sectionKey }}
+{{ $activeSections := slice "about" "research" "projects" "blog" }}
 <header class="topbar">
   <div class="topbar-inner">
     <a class="brand" href="{{ site.Home.RelPermalink }}" aria-label="{{ $profile.name }} home">
@@ -8,7 +11,8 @@
 
     <nav class="top-nav" aria-label="Primary navigation">
       {{ range $data.nav }}
-        <a href="{{ printf "%s/" .id | relURL }}">{{ .label }}</a>
+        {{ $isActive := and (in $activeSections .id) (eq $currentKey .id) }}
+        <a href="{{ printf "%s/" .id | relURL }}"{{ if $isActive }} class="is-active" aria-current="page"{{ end }}>{{ if $isActive }}[{{ .label }}]{{ else }}{{ .label }}{{ end }}</a>
       {{ end }}
     </nav>
 

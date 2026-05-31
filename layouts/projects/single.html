@@ -1,0 +1,32 @@
+{{ define "main" }}
+<div class="page-layout">
+  <aside class="page-toc" data-page-toc hidden>
+    <p class="page-toc-title">On this page</p>
+    <nav class="page-toc-nav" data-toc aria-label="{{ .Title }} contents"></nav>
+  </aside>
+  <article class="page-view project-item" data-toc-content>
+    <a class="crumb" href="{{ "projects/" | relURL }}">Projects</a>
+    <header class="post-header">
+      <p class="eyebrow">{{ if .Params.featured }}Featured project{{ else }}Project{{ end }}</p>
+      <h1>{{ .Title }}</h1>
+      {{ with .Params.summary }}
+        <p class="lead">{{ . }}</p>
+      {{ end }}
+      {{ with .Params.stack }}
+        <p class="stack-line">{{ delimit . " / " }}</p>
+      {{ end }}
+      {{ with .Params.tags }}
+        {{ partial "tags.html" . }}
+      {{ end }}
+    </header>
+    <div class="post-content">
+      {{ .Content }}
+    </div>
+    {{ with .Params.links }}
+      <footer class="item-link-footer" aria-label="{{ $.Title }} links">
+        {{ partial "entry-links.html" . }}
+      </footer>
+    {{ end }}
+  </article>
+</div>
+{{ end }}

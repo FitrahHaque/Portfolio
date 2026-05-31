@@ -4,7 +4,12 @@
 {{ $style := resources.Get "css/main.css" | minify | fingerprint }}
 {{ $script := resources.Get "js/main.js" | minify | fingerprint }}
 {{ $pageTitle := cond .IsHome (printf "%s | %s" .Site.Title $profile.role) (printf "%s | %s" .Title .Site.Title) }}
+{{ $itemSections := slice "research" "projects" "blog" }}
+{{ $isItemPage := and (eq .Kind "page") (in $itemSections .Section) }}
+{{ $isContactPage := eq .Params.sectionKey "contact" }}
+{{ $disableTypeAnimation := or $isItemPage $isContactPage }}
 <head>
+  {{ if not $disableTypeAnimation }}
   <script>
     (function() {
       try {
@@ -30,6 +35,7 @@
       document.documentElement.classList.add("use-type-animation");
     })();
   </script>
+  {{ end }}
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="{{ $description }}">

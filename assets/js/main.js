@@ -140,6 +140,27 @@
     });
   };
 
+  const initEntryLinks = () => {
+    const entries = document.querySelectorAll("[data-entry-link]");
+    if (!entries.length) return;
+
+    entries.forEach((entry) => {
+      if (entry.dataset.entryLinkReady === "true") return;
+      entry.dataset.entryLinkReady = "true";
+
+      entry.addEventListener("click", (event) => {
+        if (event.defaultPrevented || event.target.closest("a, button, input, textarea, select, summary")) {
+          return;
+        }
+
+        const href = entry.dataset.entryLink;
+        if (href) {
+          window.location.href = href;
+        }
+      });
+    });
+  };
+
   const initPageToc = () => {
     const nav = document.querySelector("[data-toc]");
     const content = document.querySelector("[data-toc-content]");
@@ -1395,6 +1416,7 @@
     
     initCursorBlink();
     initCopyEmail();
+    initEntryLinks();
     initPageToc();
     initPixelate();
 
