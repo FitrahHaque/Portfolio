@@ -670,9 +670,10 @@ h3 span {
 }
 
 .post-content h2,
-.post-content h3 {
+.post-content h3,
+.post-content h4 {
   margin-top: .9rem;
-  color: var(--text);
+  color: var(--accent-2);
 }
 
 .post-content a {
