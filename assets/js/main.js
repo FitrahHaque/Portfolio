@@ -84,6 +84,59 @@
     }, 420);
   };
 
+  const initCopyEmail = () => {
+    const buttons = document.querySelectorAll("[data-copy-email]");
+    if (!buttons.length) return;
+
+    const fallbackCopy = (text) => {
+      const input = document.createElement("textarea");
+      input.value = text;
+      input.setAttribute("readonly", "");
+      input.style.position = "fixed";
+      input.style.top = "-999px";
+      document.body.appendChild(input);
+      input.select();
+      const copied = document.execCommand("copy");
+      input.remove();
+      return copied;
+    };
+
+    const copyText = async (text) => {
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(text);
+        return true;
+      }
+
+      return fallbackCopy(text);
+    };
+
+    buttons.forEach((button) => {
+      const label = button.querySelector("[data-copy-email-label]");
+      if (!label || button.dataset.copyEmailReady === "true") return;
+
+      button.dataset.copyEmailReady = "true";
+      const defaultLabel = label.textContent;
+      let resetTimeout = null;
+
+      button.addEventListener("click", async () => {
+        if (resetTimeout) {
+          window.clearTimeout(resetTimeout);
+        }
+
+        try {
+          await copyText(button.dataset.copyEmail);
+          label.textContent = "Email address copied to clipboard";
+        } catch {
+          label.textContent = "Could not copy email";
+        }
+
+        resetTimeout = window.setTimeout(() => {
+          label.textContent = defaultLabel;
+        }, 2200);
+      });
+    });
+  };
+
   const initPageToc = () => {
     const nav = document.querySelector("[data-toc]");
     const content = document.querySelector("[data-toc-content]");
@@ -530,7 +583,6 @@
     const pageView = document.querySelector(".page-view");
 
     if (homeSection) {
-      addToQueue("#home .hero-copy .eyebrow", "type");
       addToQueue("#home .hero-copy .hero-identity", "fade", {
         onComplete: () => {
           initTypeLoop();
@@ -559,10 +611,9 @@
             if (p) {
               animationQueue.push({ el: p, type: "type" });
             }
-            const a = sec.querySelector(".text-action");
-            if (a) {
-              animationQueue.push({ el: a, type: "type" });
-            }
+            sec.querySelectorAll(".contact-links .text-action").forEach(action => {
+              animationQueue.push({ el: action, type: "type" });
+            });
           } else {
             const entries = sec.querySelectorAll(".entry");
             entries.forEach(entry => {
@@ -613,6 +664,7 @@
     const isAnimatedNav = document.documentElement.classList.contains("use-type-animation");
     
     initCursorBlink();
+    initCopyEmail();
     initPageToc();
 
     if (isAnimatedNav) {

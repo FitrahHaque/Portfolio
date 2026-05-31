@@ -1,0 +1,32 @@
+{{ $profile := .profile }}
+{{ $facts := .facts }}
+{{ $class := default "contact-links" .class }}
+{{ $label := default "Contact links" .label }}
+<div class="{{ $class }}" aria-label="{{ $label }}">
+  {{ with $profile.email }}
+    <button class="text-action" type="button" data-copy-email="{{ . }}" aria-label="Copy email address">
+      {{ partial "icon.html" "mail" }}
+      <span data-copy-email-label>Email</span>
+    </button>
+  {{ end }}
+  <a class="text-action" href="{{ $profile.resumeUrl | relURL }}">
+    {{ partial "icon.html" "download" }}
+    Resume
+  </a>
+  {{ range $profile.socials }}
+    {{ $external := or (hasPrefix .href "http://") (hasPrefix .href "https://") }}
+    <a class="text-action" href="{{ .href }}"{{ if $external }} target="_blank" rel="noreferrer noopener"{{ end }}>
+      {{ partial "icon.html" .icon }}
+      {{ .label }}
+    </a>
+  {{ end }}
+  {{ range $facts }}
+    {{ with .href }}
+      {{ $external := or (hasPrefix . "http://") (hasPrefix . "https://") }}
+      <a class="text-action" href="{{ . }}"{{ if $external }} target="_blank" rel="noreferrer noopener"{{ end }}>
+        {{ partial "icon.html" "scholar" }}
+        Google Scholar
+      </a>
+    {{ end }}
+  {{ end }}
+</div>

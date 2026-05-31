@@ -108,17 +108,7 @@
   {{ else if eq $key "contact" }}
     <div class="contact-row">
       <p>Open to research collaborations, graduate opportunities, and software engineering roles.</p>
-      {{ if $hasEmail }}
-        <a class="text-action" href="mailto:{{ $profile.email }}">
-          {{ partial "icon.html" "mail" }}
-          {{ $profile.email }}
-        </a>
-      {{ else }}
-        <a class="text-action" href="{{ $profile.resumeUrl | relURL }}">
-          {{ partial "icon.html" "download" }}
-          Resume
-        </a>
-      {{ end }}
+      {{ partial "contact-links.html" (dict "profile" $profile "facts" $data.heroFacts) }}
     </div>
   {{ end }}
   </article>

@@ -1,20 +1,23 @@
 profile:
-  name: Asif Haque
+  name: Asif Ihtemadul Haque
   initials: AH
   role: Software Engineer & Research Student
-  photo: profile.svg
+  photo: profile.png
   tagline: Software engineer and research student working at the intersection of machine learning and AI. My research focuses on optimizing future environmental embedding representations for crop performance prediction.
   location: Research and engineering opportunities
-  email: ""
+  email: asifihtemadulhaque@gmail.com
   resumeUrl: resume.pdf
   socials:
     - label: GitHub
-      href: https://github.com/ihtemad
+      href: https://github.com/FitrahHaque
       icon: github
+    - label: LinkedIn
+      href: https://linkedin.com/in/ihtemad
+      icon: linkedin
 
 nav:
   - id: about
-    label: About
+    label: About Me
   - id: research
     label: Research
   - id: projects
@@ -27,13 +30,16 @@ heroFacts:
     value: Future environment signals
   - label: Research
     value: Crop performance prediction
+  - label: Scholar
+    value: Google Scholar
+    href: https://scholar.google.ca/citations?hl=en&user=8RmP7v4AAAAJ
   - label: Build
     value: ML tooling and data systems
   - label: Notes
     value: Experiments, models, results
 
 about:
-  heading: About
+  heading: About Me
   paragraphs:
     - I am a software engineer and research student focused on machine learning and artificial intelligence. I care about building correct, maintainable systems and applying ML to problems that have real-world impact.
     - My current research investigates how learned environmental embeddings can improve crop performance prediction. I enjoy bridging rigorous research with practical software engineering by turning models and ideas into reliable, well-tested tools.

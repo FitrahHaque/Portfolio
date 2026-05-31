@@ -5,12 +5,14 @@
 
 <section id="home" class="hero-section" aria-label="Introduction">
   <div class="hero-copy">
-    <p class="eyebrow">{{ $profile.role }}</p>
     <div class="hero-identity">
       <img class="hero-mark" src="{{ $profile.photo | relURL }}" width="72" height="72" alt="Portrait mark for {{ $profile.name }}">
-      <h1 class="type-loop" aria-label="{{ $profile.name }}">
-        <span data-type-loop data-type-text="{{ $profile.name }}" aria-hidden="true">{{ $profile.name }}</span>
-      </h1>
+      <div class="hero-heading">
+        <h1 class="type-loop" aria-label="{{ $profile.name }}" style="--name-ch: {{ len $profile.name }}ch;">
+          <span data-type-loop data-type-text="{{ $profile.name }}" aria-hidden="true">{{ $profile.name }}</span>
+        </h1>
+        <p class="eyebrow">{{ $profile.role }}</p>
+      </div>
     </div>
     <p class="lead">
       {{ $profile.tagline }}
@@ -18,26 +20,21 @@
         Learn more about me here <span aria-hidden="true">↗</span>
       </a>
     </p>
-    <div class="hero-actions" aria-label="Primary links">
-      <a class="text-action" href="{{ $profile.resumeUrl | relURL }}">
-        {{ partial "icon.html" "download" }}
-        Resume
-      </a>
-      {{ range $profile.socials }}
-        {{ $external := or (hasPrefix .href "http://") (hasPrefix .href "https://") }}
-        <a class="text-action" href="{{ .href }}"{{ if $external }} target="_blank" rel="noreferrer noopener"{{ end }}>
-          {{ partial "icon.html" .icon }}
-          {{ .label }}
-        </a>
-      {{ end }}
-    </div>
+    {{ partial "contact-links.html" (dict "profile" $profile "facts" $data.heroFacts "class" "hero-actions" "label" "Primary links") }}
   </div>
   <aside class="hero-panel" aria-label="Profile summary">
     <dl>
       {{ range $data.heroFacts }}
         <div>
           <dt>{{ .label }}</dt>
-          <dd>{{ .value }}</dd>
+          <dd>
+            {{ if .href }}
+              {{ $external := or (hasPrefix .href "http://") (hasPrefix .href "https://") }}
+              <a href="{{ .href }}"{{ if $external }} target="_blank" rel="noreferrer noopener"{{ end }}>{{ .value }}</a>
+            {{ else }}
+              {{ .value }}
+            {{ end }}
+          </dd>
         </div>
       {{ end }}
     </dl>
@@ -145,16 +142,6 @@
 <section id="contact" class="content-section contact-section">
   {{ partial "section-heading.html" (dict "eyebrow" "Contact" "title" "Get in touch" "page" "contact") }}
   <p>Open to research collaborations, graduate opportunities, and software engineering roles.</p>
-  {{ if $hasEmail }}
-    <a class="text-action" href="mailto:{{ $profile.email }}">
-      {{ partial "icon.html" "mail" }}
-      {{ $profile.email }}
-    </a>
-  {{ else }}
-    <a class="text-action" href="{{ $profile.resumeUrl | relURL }}">
-      {{ partial "icon.html" "download" }}
-      Resume
-    </a>
-  {{ end }}
+  {{ partial "contact-links.html" (dict "profile" $profile "facts" $data.heroFacts) }}
 </section>
 {{ end }}
