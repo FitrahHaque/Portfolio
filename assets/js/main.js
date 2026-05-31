@@ -256,7 +256,7 @@
         return;
       }
       
-      // On mobile, if we have more than 3 links, truncate to show active + 1 before + 1 after
+      // On mobile, if we have more than 3 links, truncate to carousel window of 3 items
       if (links.length <= 3) {
         links.forEach(({ link }) => {
           link.style.display = "";
@@ -272,16 +272,40 @@
         });
         return;
       }
+
+      // Calculate progress of current scroll inside the active target
+      let progress = 0;
+      const currentScroll = window.scrollY;
+      const activeTarget = snapTargets[activeIndex];
+      const nextTarget = snapTargets[activeIndex + 1];
       
-      let start = activeIndex - 1;
-      let end = activeIndex + 1;
+      if (activeTarget) {
+        const y_curr = activeTarget.y;
+        const y_next = nextTarget ? nextTarget.y : document.documentElement.scrollHeight - window.innerHeight;
+        const dist = y_next - y_curr;
+        if (dist > 0) {
+          progress = (currentScroll - y_curr) / dist;
+        }
+      }
+
+      let start, end;
+      if (progress < 0.5) {
+        // Upper half of section: active element is in the middle [activeIndex - 1, activeIndex, activeIndex + 1]
+        start = activeIndex - 1;
+        end = activeIndex + 1;
+      } else {
+        // Lower half of section: active element shifts to the top [activeIndex, activeIndex + 1, activeIndex + 2]
+        start = activeIndex;
+        end = activeIndex + 2;
+      }
       
+      // Cap the windows to bounds of links
       if (start < 0) {
         start = 0;
         end = 2;
       } else if (end >= links.length) {
         end = links.length - 1;
-        start = links.length - 3;
+        start = Math.max(0, end - 2);
       }
       
       links.forEach(({ link }, idx) => {
@@ -443,6 +467,7 @@
         ticking = true;
         window.requestAnimationFrame(() => {
           updateActive();
+          updateTocTruncation();
           ticking = false;
         });
       }

@@ -861,7 +861,7 @@ h3 span {
     padding: 1.5rem 1.5rem 1.5rem 1rem;
     border: none;
     border-radius: 0;
-    background: rgba(11, 20, 23, 0.25);
+    background: rgba(11, 20, 23, 0.15);
     box-shadow: none;
     backdrop-filter: blur(4px);
     -webkit-backdrop-filter: blur(4px);
@@ -869,9 +869,9 @@ h3 span {
     opacity: 0;
     pointer-events: none;
     transform: translate(-100%, -50%);
-    transition: opacity .26s ease, transform .32s cubic-bezier(0.16, 1, 0.3, 1);
-    mask-image: radial-gradient(ellipse at left center, black 65%, transparent 100%);
-    -webkit-mask-image: radial-gradient(ellipse at left center, black 65%, transparent 100%);
+    transition: opacity .45s cubic-bezier(0.16, 1, 0.3, 1), transform .6s cubic-bezier(0.16, 1, 0.3, 1);
+    mask-image: radial-gradient(ellipse at left center, black 20%, rgba(0,0,0,0.85) 50%, transparent 95%);
+    -webkit-mask-image: radial-gradient(ellipse at left center, black 20%, rgba(0,0,0,0.85) 50%, transparent 95%);
   }
 
   .page-toc.is-mobile-visible {
@@ -975,7 +975,7 @@ h3 span {
   }
 
   h1 {
-    font-size: 1.85rem;
+    font-size: clamp(1.2rem, 5.5vw, 1.6rem);
   }
 
   .hero-mark {
