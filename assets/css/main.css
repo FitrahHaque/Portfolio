@@ -854,28 +854,30 @@ h3 span {
   .page-toc {
     position: fixed;
     top: 50%;
-    left: 50%;
+    left: 0;
     z-index: 18;
-    width: min(16rem, calc(100vw - 3rem));
-    max-height: calc(100dvh - 4rem);
-    padding: 1.25rem 1.25rem 1.35rem 1.25rem;
+    width: min(16rem, calc(100vw - 2rem));
+    max-height: calc(100dvh - 2rem);
+    padding: 1.5rem 1.5rem 1.5rem 1rem;
     border: none;
     border-radius: 0;
     background: rgba(11, 20, 23, 0.25);
     box-shadow: none;
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
     overflow-y: auto;
     opacity: 0;
     pointer-events: none;
-    transform: translate(-50%, -50%) scale(0.95);
-    transition: opacity .26s ease, transform .32s ease;
+    transform: translate(-100%, -50%);
+    transition: opacity .26s ease, transform .32s cubic-bezier(0.16, 1, 0.3, 1);
+    mask-image: radial-gradient(ellipse at left center, black 65%, transparent 100%);
+    -webkit-mask-image: radial-gradient(ellipse at left center, black 65%, transparent 100%);
   }
 
   .page-toc.is-mobile-visible {
     opacity: 1;
     pointer-events: auto;
-    transform: translate(-50%, -50%) scale(1);
+    transform: translate(0, -50%);
   }
 
   .page-toc-title {
@@ -904,7 +906,7 @@ h3 span {
   }
 
   h1 {
-    font-size: 2.15rem;
+    font-size: clamp(1.35rem, 6.5vw, 1.85rem);
   }
 
   .lead {
