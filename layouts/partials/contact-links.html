@@ -2,6 +2,31 @@
 {{ $facts := .facts }}
 {{ $class := default "contact-links" .class }}
 {{ $label := default "Contact links" .label }}
+{{- $resumeLink := $profile.resumeUrl -}}
+{{- if .page -}}
+  {{- if not (hasPrefix $resumeLink "http") -}}
+    {{- $relPath := .page.RelPermalink -}}
+    {{- $subpath := (urls.Parse site.BaseURL).Path -}}
+    {{- if and $subpath (ne $subpath "/") -}}
+      {{- $relPath = strings.TrimPrefix $subpath $relPath -}}
+    {{- end -}}
+    {{- $depth := 0 -}}
+    {{- $trimmed := strings.Trim $relPath "/" -}}
+    {{- if ne $trimmed "" -}}
+      {{- $parts := split $trimmed "/" -}}
+      {{- $depth = len $parts -}}
+    {{- end -}}
+    {{- $dots := "" -}}
+    {{- if gt $depth 0 -}}
+      {{- range seq $depth -}}
+        {{- $dots = print $dots "../" -}}
+      {{- end -}}
+    {{- end -}}
+    {{- $resumeLink = print $dots $profile.resumeUrl -}}
+  {{- end -}}
+{{- else -}}
+  {{- $resumeLink = $resumeLink | relURL -}}
+{{- end -}}
 <div class="{{ $class }}" aria-label="{{ $label }}">
   {{ with $profile.email }}
     <button class="text-action" type="button" data-copy-email="{{ . }}" aria-label="Copy email address">
@@ -9,7 +34,7 @@
       <span data-copy-email-label>Email</span>
     </button>
   {{ end }}
-  <a class="text-action" href="{{ $profile.resumeUrl | relURL }}" download="Asif_Haque_Resume.pdf" target="_blank" rel="noreferrer noopener">
+  <a class="text-action" href="{{ $resumeLink }}" download="Asif_Haque_Resume.pdf" target="_blank" rel="noreferrer noopener">
     {{ partial "icon.html" "download" }}
     Resume
   </a>

@@ -1095,3 +1095,211 @@ h3 span {
     transition-duration: .01ms !important;
   }
 }
+
+/* Animated Cyber Mascot (Cyan Cat) */
+.mascot-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 15;
+  width: clamp(32px, 2.5vw, 44px);
+  height: clamp(32px, 2.5vw, 44px);
+  --mascot-x: 80px;
+  --mascot-y: 50vh;
+  --mascot-facing: 1;
+  --mascot-rotation: 0deg;
+  --mascot-fill: rgba(10, 38, 42, 0.98);
+  pointer-events: auto;
+  cursor: pointer;
+  opacity: 0.88;
+  transform: translate3d(var(--mascot-x), var(--mascot-y), 0) rotate(var(--mascot-rotation, 0deg)) scaleX(var(--mascot-facing));
+  transform-origin: center center;
+  transition: filter 0.2s ease-out, opacity 0.2s ease-out;
+  filter:
+    drop-shadow(0 0 1px rgba(3, 8, 10, 0.95))
+    drop-shadow(0 4px 9px rgba(0, 240, 255, 0.2));
+  perspective: 700px;
+  will-change: transform;
+}
+
+.mascot-sprite {
+  width: 100%;
+  height: 100%;
+  transform-origin: center center;
+  transform-style: preserve-3d;
+}
+
+.mascot-container svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.mascot-container [stroke="#00f0ff"] {
+  stroke: #7ff7ff;
+}
+
+.mascot-container [fill="#00f0ff"] {
+  fill: #7ff7ff;
+}
+
+.mascot-paw {
+  transform-box: fill-box;
+  transform-origin: center top;
+}
+
+.mascot-tail {
+  transform-origin: 18px 34px;
+  animation: tail-idle 2.0s infinite ease-in-out;
+}
+
+/* Walking state animations - alternating diagonal pairs for natural cat movement */
+.mascot-container.is-walking .leg-bl {
+  animation: cat-leg-walk-a 1.0s infinite linear;
+}
+.mascot-container.is-walking .leg-fr {
+  animation: cat-leg-walk-a 1.0s infinite linear;
+}
+.mascot-container.is-walking .leg-br {
+  animation: cat-leg-walk-b 1.0s infinite linear;
+}
+.mascot-container.is-walking .leg-fl {
+  animation: cat-leg-walk-b 1.0s infinite linear;
+}
+.mascot-container.is-walking .mascot-body-stroke,
+.mascot-container.is-walking .mascot-body-fill {
+  animation: body-bob 0.5s infinite alternate ease-in-out;
+}
+.mascot-container.is-walking .mascot-head-stroke,
+.mascot-container.is-walking .mascot-head-fill {
+  animation: body-bob 0.5s infinite alternate ease-in-out 0.1s;
+}
+.mascot-container.is-walking .mascot-tail {
+  animation: tail-wag 0.5s infinite alternate ease-in-out;
+  transform-origin: 18px 34px;
+}
+
+/* Sleeping state stylings & animations */
+.mascot-container.is-sleeping {
+  opacity: 0.68;
+  filter:
+    drop-shadow(0 0 1px rgba(3, 8, 10, 0.95))
+    drop-shadow(0 2px 5px rgba(0, 240, 255, 0.1));
+}
+.mascot-container.is-sleeping .mascot-sprite {
+  transform: scale(0.9) translateY(4px);
+}
+.mascot-container.is-sleeping .leg-bl,
+.mascot-container.is-sleeping .leg-br,
+.mascot-container.is-sleeping .leg-fl,
+.mascot-container.is-sleeping .leg-fr {
+  transform: translateY(-1.5px) rotate(8deg);
+  opacity: 0.65;
+}
+.mascot-container.is-sleeping .mascot-tail {
+  animation: tail-sleep 2.2s infinite ease-in-out;
+  transform-origin: 18px 34px;
+}
+.mascot-container.is-sleeping .mascot-body-stroke,
+.mascot-container.is-sleeping .mascot-body-fill,
+.mascot-container.is-sleeping .mascot-head-stroke,
+.mascot-container.is-sleeping .mascot-head-fill {
+  animation: breathe 3.2s infinite ease-in-out;
+  transform-origin: center bottom;
+}
+.mascot-container.is-sleeping .mascot-eye-l,
+.mascot-container.is-sleeping .mascot-eye-r {
+  transform: scaleY(0.18);
+  transform-origin: center;
+  opacity: 0.8;
+}
+
+/* Startled dizzy shake-and-jump touch reaction */
+.mascot-eye-shock-l,
+.mascot-eye-shock-r {
+  display: none;
+}
+.mascot-container.is-reacting .mascot-eye-l,
+.mascot-container.is-reacting .mascot-eye-r {
+  display: none;
+}
+.mascot-container.is-reacting .mascot-eye-shock-l,
+.mascot-container.is-reacting .mascot-eye-shock-r {
+  display: block;
+}
+
+.mascot-container.is-reacting .mascot-sprite {
+  animation: mascot-startled-shake-jump 0.8s cubic-bezier(0.25, 1, 0.5, 1) both;
+  transform-origin: center bottom;
+}
+.mascot-container.is-reacting .mascot-tail {
+  animation: tail-startled 0.8s ease-in-out both;
+  transform-origin: 18px 34px;
+}
+
+@keyframes mascot-startled-shake-jump {
+  0% { transform: translate(0, 0); }
+  /* Phase 1: Rapid cartoon shudder/shake (0% to 35%) */
+  5% { transform: translate(-3px, 0); }
+  10% { transform: translate(3px, 0); }
+  15% { transform: translate(-3px, 0); }
+  20% { transform: translate(3px, 0); }
+  25% { transform: translate(-2px, 0); }
+  30% { transform: translate(2px, 0); }
+  35% { transform: translate(0, 0); }
+  /* Phase 2: Crisp vertical hop up and down (35% to 100%) */
+  50% { transform: translateY(-20px); }
+  70% { transform: translateY(0); }
+  85% { transform: translateY(-2px); }
+  100% { transform: translateY(0); }
+}
+
+@keyframes tail-startled {
+  0% { transform: rotate(0); }
+  10%, 30% { transform: rotate(-30deg); }
+  20%, 40% { transform: rotate(30deg); }
+  50%, 80% { transform: rotate(-45deg); } /* Tail goes straight up in surprise! */
+  100% { transform: rotate(0); }
+}
+
+@keyframes cat-leg-walk-a {
+  0% { transform: translate(0, 0) rotate(12deg); }
+  25% { transform: translate(-1.5px, -2.5px) rotate(0deg); }
+  50% { transform: translate(1px, 0) rotate(-12deg); }
+  75% { transform: translate(0.5px, 0) rotate(-4deg); }
+  100% { transform: translate(0, 0) rotate(12deg); }
+}
+@keyframes cat-leg-walk-b {
+  0% { transform: translate(1px, 0) rotate(-12deg); }
+  25% { transform: translate(0.5px, 0) rotate(-4deg); }
+  50% { transform: translate(0, 0) rotate(12deg); }
+  75% { transform: translate(-1.5px, -2.5px) rotate(0deg); }
+  100% { transform: translate(1px, 0) rotate(-12deg); }
+}
+@keyframes body-bob {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-1.2px); }
+}
+@keyframes tail-wag {
+  0% { transform: rotate(-8deg); }
+  100% { transform: rotate(10deg); }
+}
+@keyframes tail-sleep {
+  0%, 100% { transform: rotate(-4deg); }
+  50% { transform: rotate(5deg); }
+}
+@keyframes breathe {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.04) translateY(-0.2px); }
+}
+@keyframes tail-idle {
+  0%, 100% { transform: rotate(0deg); }
+  50% { transform: rotate(8deg); }
+}
+
+@media (max-width: 520px) {
+  .mascot-container {
+    width: 32px;
+    height: 32px;
+  }
+}
