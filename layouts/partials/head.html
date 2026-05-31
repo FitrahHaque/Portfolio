@@ -3,7 +3,7 @@
 {{ $image := .Site.Params.image | default "og-image.svg" }}
 {{ $style := resources.Get "css/main.css" | minify | fingerprint }}
 {{ $script := resources.Get "js/main.js" | minify | fingerprint }}
-{{ $pageTitle := cond .IsHome (printf "%s | %s" .Site.Title $profile.role) (printf "%s | %s" .Title .Site.Title) }}
+{{ $pageTitle := $profile.name }}
 {{ $itemSections := slice "research" "projects" "blog" }}
 {{ $isItemPage := and (eq .Kind "page") (in $itemSections .Section) }}
 {{ $isContactPage := eq .Params.sectionKey "contact" }}
@@ -45,7 +45,8 @@
   <title>{{ $pageTitle }}</title>
 
   <link rel="canonical" href="{{ .Permalink }}">
-  <link rel="icon" type="image/svg+xml" href="{{ "favicon.svg" | relURL }}">
+  <link rel="icon" type="image/png" href="{{ "profile.png" | relURL }}">
+  <link rel="apple-touch-icon" href="{{ "profile.png" | relURL }}">
   <link rel="stylesheet" href="{{ $style.RelPermalink }}" integrity="{{ $style.Data.Integrity }}">
   <script src="{{ $script.RelPermalink }}" integrity="{{ $script.Data.Integrity }}" defer></script>
 
