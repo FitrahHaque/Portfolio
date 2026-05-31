@@ -238,7 +238,6 @@ ul {
   align-items: start;
   gap: 2rem;
   padding: 2.35rem 0 2.1rem;
-  border-bottom: 1px solid rgba(60, 83, 92, .55);
 }
 
 .hero-copy {
@@ -420,7 +419,6 @@ h3 span {
 }
 
 .content-section {
-  border-bottom: 1px solid rgba(60, 83, 92, .42);
 }
 
 .page-layout {
@@ -500,11 +498,28 @@ h3 span {
 }
 
 .section-heading {
-  display: grid;
-  grid-template-columns: 8.25rem minmax(0, 1fr);
-  align-items: baseline;
-  gap: 1.25rem;
+  display: block;
   margin-bottom: 1.1rem;
+}
+
+.section-heading .eyebrow {
+  display: none;
+}
+
+.section-heading h2 {
+  font-size: 1.62rem;
+  font-weight: 700;
+  color: var(--accent-2);
+}
+
+.section-title-link {
+  color: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+}
+
+.section-title-link:hover {
+  color: var(--accent);
 }
 
 .section-title-link span {
@@ -714,23 +729,12 @@ h3 span {
   transform: scale(1.008);
 }
 
-.contact-row {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  align-items: center;
-  gap: 1.5rem;
-}
-
+.contact-row,
 .contact-section {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  align-items: center;
-  gap: 0 1.5rem;
-}
-
-.contact-section .section-heading {
-  grid-column: 1 / -1;
-  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1rem;
 }
 
 .contact-row p,
@@ -739,6 +743,9 @@ h3 span {
   color: var(--muted);
   font-size: .9rem;
   line-height: 1.6;
+  border-top: 1px solid var(--border-strong);
+  padding-top: 1rem;
+  width: 100%;
 }
 
 .site-footer {
@@ -814,11 +821,14 @@ h3 span {
   }
 
 
+  .about-grid {
+    grid-template-columns: 1fr;
+    gap: .65rem;
+  }
+
   .section-heading,
-  .about-grid,
   .contact-row,
   .contact-section {
-    grid-template-columns: 1fr;
     gap: .65rem;
   }
 
@@ -880,6 +890,84 @@ h3 span {
   .site-footer {
     display: grid;
   }
+}
+
+.use-type-animation .type-animate-hidden {
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transform: translateY(4px) !important;
+  transition: opacity 0.3s ease, transform 0.3s ease !important;
+}
+
+.use-type-animation #home .hero-copy .eyebrow,
+.use-type-animation #home .hero-copy .hero-identity,
+.use-type-animation #home .hero-copy .lead,
+.use-type-animation #home .hero-copy .hero-actions,
+.use-type-animation #home .hero-panel dl > div,
+.use-type-animation .section-heading,
+.use-type-animation .entry,
+.use-type-animation .skill-row,
+.use-type-animation .crumb,
+.use-type-animation .about-grid .prose p,
+.use-type-animation .about-grid .highlights > div,
+.use-type-animation .contact-row,
+.use-type-animation .contact-section p,
+.use-type-animation .contact-section .text-action,
+.use-type-animation .post-header,
+.use-type-animation .post-content {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(4px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.use-type-animation .type-animate-visible {
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  transform: translateY(0) !important;
+}
+
+.use-type-animation #home .hero-panel {
+  border-left-color: transparent;
+  transition: border-color 0.4s ease;
+}
+
+.use-type-animation #home .hero-panel.type-animate-visible {
+  border-left-color: var(--border-strong) !important;
+}
+
+.type-animate-done #home .hero-panel {
+  border-left-color: var(--border-strong) !important;
+  transition: none !important;
+}
+
+.use-type-animation .tag-list,
+.use-type-animation .entry-links,
+.use-type-animation .tag-list li,
+.use-type-animation .entry-links a,
+.use-type-animation .detail-list li {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+
+.use-type-animation .tag-list.type-animate-visible,
+.use-type-animation .entry-links.type-animate-visible,
+.use-type-animation .tag-list li.type-animate-visible,
+.use-type-animation .entry-links a.type-animate-visible,
+.use-type-animation .detail-list li.type-animate-visible {
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+
+.type-animate-done .tag-list,
+.type-animate-done .entry-links,
+.type-animate-done .tag-list li,
+.type-animate-done .entry-links a,
+.type-animate-done .detail-list li {
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  transition: none !important;
 }
 
 @media (prefers-reduced-motion: reduce) {

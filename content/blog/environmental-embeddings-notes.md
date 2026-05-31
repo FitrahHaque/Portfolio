@@ -10,4 +10,10 @@ tags:
 
 This is a starter post. Replace it with your own writing, or delete it when you add real notes.
 
+## Overview
+
 The goal of this space is to keep short research logs close to the portfolio: assumptions, experiment changes, dataset notes, and model observations that are useful to revisit later.
+
+## Representation Learning
+
+Representing environmental context (climate, weather, soil) as robust low-dimensional embeddings to improve model generalization across unseen regions and seasons.

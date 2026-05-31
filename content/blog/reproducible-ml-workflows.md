@@ -10,4 +10,12 @@ tags:
 
 This is a starter post. Replace it with a real write-up when you are ready.
 
+## Key Principles
+
 For experiment-heavy work, the basics matter: fixed seeds, versioned data, committed config files, clear metrics, and a short note explaining what changed between runs.
+
+## Checklist
+
+- Fix random seeds in PyTorch/NumPy.
+- Log exact data hash / git commit.
+- Track metrics using standard logs.

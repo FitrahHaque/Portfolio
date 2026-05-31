@@ -5,6 +5,31 @@
 {{ $script := resources.Get "js/main.js" | minify | fingerprint }}
 {{ $pageTitle := cond .IsHome (printf "%s | %s" .Site.Title $profile.role) (printf "%s | %s" .Title .Site.Title) }}
 <head>
+  <script>
+    (function() {
+      try {
+        const entries = performance.getEntriesByType("navigation");
+        if (entries.length > 0) {
+          const entry = entries[0];
+          if (entry.type === "reload") {
+            // A hard refresh bypasses the cache and downloads the full file.
+            // A standard reload loaded from cache has transferSize = 0.
+            // A standard reload with 304 validation has a small transferSize (usually < 500 bytes).
+            // So if transferSize is greater than 1000 bytes, it's a hard refresh - run animation.
+            // Otherwise, it's a standard reload - bypass animation.
+            if (entry.transferSize && entry.transferSize > 1000) {
+              // Hard refresh, proceed with animation
+            } else {
+              return;
+            }
+          } else if (entry.type === "back_forward") {
+            return;
+          }
+        }
+      } catch (e) {}
+      document.documentElement.classList.add("use-type-animation");
+    })();
+  </script>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="{{ $description }}">
