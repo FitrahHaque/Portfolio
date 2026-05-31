@@ -830,7 +830,8 @@ h3 span {
 
   .top-nav {
     width: 100%;
-    justify-content: flex-start;
+    justify-content: flex-end;
+    justify-self: end;
   }
 
   .content-shell {
@@ -844,7 +845,43 @@ h3 span {
   }
 
   .page-toc {
-    display: none;
+    position: fixed;
+    top: var(--mobile-toc-top, 4.75rem);
+    left: 0;
+    z-index: 18;
+    width: min(15.5rem, calc(100vw - 1.5rem));
+    max-height: calc(100dvh - var(--mobile-toc-top, 4.75rem) - .75rem);
+    padding: .85rem .85rem .9rem .75rem;
+    border: 1px solid rgba(60, 83, 92, .68);
+    border-left: 0;
+    border-radius: 0 var(--radius) var(--radius) 0;
+    background: rgba(11, 20, 23, .93);
+    box-shadow: 0 16px 34px rgba(0, 0, 0, .34);
+    backdrop-filter: blur(14px);
+    overflow-y: auto;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateX(calc(-100% - 1px));
+    transition: opacity .26s ease, transform .32s ease;
+  }
+
+  .page-toc.is-mobile-visible {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateX(0);
+  }
+
+  .page-toc-title {
+    margin-bottom: .65rem;
+    padding-left: .55rem;
+  }
+
+  .page-toc-nav {
+    border-left-color: rgba(60, 83, 92, .8);
+  }
+
+  .page-toc-link {
+    padding: .34rem .65rem;
   }
 
   .hero-section {

@@ -194,6 +194,57 @@
     const aside = nav.closest("[data-page-toc]");
     if (aside) aside.hidden = false;
 
+    const mobileTocQuery = window.matchMedia("(max-width: 920px)");
+    let mobileTocHideTimeout = null;
+
+    const syncMobileTocTop = () => {
+      if (!aside) return;
+      const topbar = document.querySelector(".topbar");
+      const top = (topbar ? topbar.offsetHeight : 0) + 12;
+      aside.style.setProperty("--mobile-toc-top", `${top}px`);
+    };
+
+    const hideMobileToc = () => {
+      if (!aside) return;
+      if (mobileTocHideTimeout) {
+        window.clearTimeout(mobileTocHideTimeout);
+        mobileTocHideTimeout = null;
+      }
+      aside.classList.remove("is-mobile-visible");
+    };
+
+    const revealMobileToc = () => {
+      if (!aside || !mobileTocQuery.matches) {
+        hideMobileToc();
+        return;
+      }
+
+      syncMobileTocTop();
+      aside.classList.add("is-mobile-visible");
+
+      if (mobileTocHideTimeout) {
+        window.clearTimeout(mobileTocHideTimeout);
+      }
+      mobileTocHideTimeout = window.setTimeout(() => {
+        aside.classList.remove("is-mobile-visible");
+        mobileTocHideTimeout = null;
+      }, 950);
+    };
+
+    const onMobileTocViewportChange = () => {
+      syncMobileTocTop();
+      if (!mobileTocQuery.matches) {
+        hideMobileToc();
+      }
+    };
+
+    syncMobileTocTop();
+    if (mobileTocQuery.addEventListener) {
+      mobileTocQuery.addEventListener("change", onMobileTocViewportChange);
+    } else if (mobileTocQuery.addListener) {
+      mobileTocQuery.addListener(onMobileTocViewportChange);
+    }
+
     let activeLink = null;
     const setActive = (link) => {
       if (link === activeLink) return;
@@ -349,11 +400,13 @@
     };
 
     const onResize = () => {
+      syncMobileTocTop();
       updateSnapTargets();
       onScroll();
     };
 
     window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("scroll", revealMobileToc, { passive: true });
     window.addEventListener("resize", onResize, { passive: true });
     window.addEventListener("load", onResize);
 
@@ -546,17 +599,83 @@
   };
 
   const skipEvents = ["mousedown", "keydown"];
+  const tapSkipDistance = 12;
+  let skipTouchStart = null;
+
+  const getPrimaryTouch = (event, listName) => {
+    const touches = event[listName];
+    return touches && touches.length === 1 ? touches[0] : null;
+  };
+
+  const onSkipTouchStart = (event) => {
+    const touch = getPrimaryTouch(event, "touches");
+    if (!touch) {
+      skipTouchStart = null;
+      return;
+    }
+
+    skipTouchStart = {
+      x: touch.clientX,
+      y: touch.clientY,
+      time: Date.now(),
+      moved: false
+    };
+  };
+
+  const onSkipTouchMove = (event) => {
+    if (!skipTouchStart) return;
+    const touch = getPrimaryTouch(event, "touches");
+    if (!touch) {
+      skipTouchStart = null;
+      return;
+    }
+
+    const distance = Math.hypot(touch.clientX - skipTouchStart.x, touch.clientY - skipTouchStart.y);
+    if (distance > tapSkipDistance) {
+      skipTouchStart.moved = true;
+    }
+  };
+
+  const onSkipTouchEnd = (event) => {
+    if (!skipTouchStart) return;
+
+    const touch = getPrimaryTouch(event, "changedTouches");
+    const distance = touch
+      ? Math.hypot(touch.clientX - skipTouchStart.x, touch.clientY - skipTouchStart.y)
+      : 0;
+    const elapsed = Date.now() - skipTouchStart.time;
+    const isTap = !skipTouchStart.moved && distance <= tapSkipDistance && elapsed < 750;
+
+    skipTouchStart = null;
+
+    if (isTap) {
+      skipAnimation();
+    }
+  };
+
+  const onSkipTouchCancel = () => {
+    skipTouchStart = null;
+  };
 
   const addSkipListeners = () => {
     skipEvents.forEach(evt => {
       window.addEventListener(evt, skipAnimation, { passive: true });
     });
+    window.addEventListener("touchstart", onSkipTouchStart, { passive: true });
+    window.addEventListener("touchmove", onSkipTouchMove, { passive: true });
+    window.addEventListener("touchend", onSkipTouchEnd, { passive: true });
+    window.addEventListener("touchcancel", onSkipTouchCancel, { passive: true });
   };
 
   const removeSkipListeners = () => {
     skipEvents.forEach(evt => {
       window.removeEventListener(evt, skipAnimation);
     });
+    window.removeEventListener("touchstart", onSkipTouchStart);
+    window.removeEventListener("touchmove", onSkipTouchMove);
+    window.removeEventListener("touchend", onSkipTouchEnd);
+    window.removeEventListener("touchcancel", onSkipTouchCancel);
+    skipTouchStart = null;
   };
 
   const startTypeAnimation = () => {
