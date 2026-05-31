@@ -1,3 +1,4 @@
+// Portfolio script - Optimized scrolling and dynamic sidebar TOC behavior
 (() => {
   const initTypeLoop = () => {
     const targets = document.querySelectorAll("#home [data-type-loop]");
