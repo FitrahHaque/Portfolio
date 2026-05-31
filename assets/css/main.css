@@ -854,44 +854,104 @@ h3 span {
 
   .page-toc {
     position: fixed;
-    top: 50%;
+    top: var(--mobile-toc-top, 3.35rem);
     left: 0;
+    right: 0;
     z-index: 18;
-    width: min(16rem, calc(100vw - 2rem));
-    max-height: calc(100dvh - 2rem);
-    padding: 1.5rem 1.5rem 1.5rem 1rem;
+    width: 100%;
+    max-height: calc(100dvh - var(--mobile-toc-top, 3.35rem) - 1rem);
+    padding: 0.4rem 1.5rem 0.6rem 1.5rem;
     border: none;
     border-radius: 0;
     background: rgba(11, 20, 23, 0.15);
     box-shadow: none;
     backdrop-filter: blur(4px);
     -webkit-backdrop-filter: blur(4px);
-    overflow-y: auto;
+    overflow: hidden;
     opacity: 0;
     pointer-events: none;
-    transform: translate(-100%, -50%);
+    transform: translateY(-100%);
     transition: opacity .45s cubic-bezier(0.16, 1, 0.3, 1), transform .6s cubic-bezier(0.16, 1, 0.3, 1);
-    mask-image: radial-gradient(ellipse at left center, black 20%, rgba(0,0,0,0.85) 50%, transparent 95%);
-    -webkit-mask-image: radial-gradient(ellipse at left center, black 20%, rgba(0,0,0,0.85) 50%, transparent 95%);
+    mask-image: radial-gradient(ellipse at top center, black 20%, rgba(0,0,0,0.85) 50%, transparent 95%);
+    -webkit-mask-image: radial-gradient(ellipse at top center, black 20%, rgba(0,0,0,0.85) 50%, transparent 95%);
   }
 
   .page-toc.is-mobile-visible {
     opacity: 1;
     pointer-events: auto;
-    transform: translate(0, -50%);
+    transform: translateY(0);
   }
 
   .page-toc-title {
-    margin-bottom: .65rem;
-    padding-left: .55rem;
+    text-align: center;
+    margin-bottom: 0.2rem;
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--faint);
+    opacity: 1.0;
   }
 
   .page-toc-nav {
-    border-left-color: rgba(60, 83, 92, .8);
+    position: relative;
+    height: 6.5rem;
+    perspective: 400px;
+    transform-style: preserve-3d;
+    overflow: hidden;
+    border-left: none;
+    margin-left: 0;
+    padding-left: 0;
+  }
+
+  /* Selection brackets for slot picker */
+  .page-toc-nav::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 1.6rem;
+    margin-top: -0.8rem;
+    border-top: 1px solid rgba(146, 216, 231, 0.15);
+    border-bottom: 1px solid rgba(146, 216, 231, 0.15);
+    background: rgba(146, 216, 231, 0.02);
+    pointer-events: none;
+    z-index: 1;
   }
 
   .page-toc-link {
-    padding: .34rem .65rem;
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 1.6rem;
+    line-height: 1.6rem;
+    margin: 0;
+    margin-top: -0.8rem;
+    padding: 0 0.5rem;
+    border-left: none;
+    text-align: center;
+    transform-style: preserve-3d;
+    transform: rotateX(calc(var(--offset, 0) * -22deg)) translateZ(48px);
+    opacity: calc(1 - min(0.8, abs(var(--offset, 0)) * 0.45));
+    pointer-events: calc(abs(var(--offset, 0)) < 3 ? "auto" : "none");
+    transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1), color 0.14s ease;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    font-size: 0.82rem;
+  }
+
+  .page-toc-link:hover {
+    transform: rotateX(calc(var(--offset, 0) * -22deg)) translateZ(48px) scale(1.02);
+    color: var(--text);
+  }
+
+  .page-toc-link.is-active {
+    border-left-color: transparent;
+    color: var(--accent);
+    font-weight: 600;
   }
 
   .hero-section {

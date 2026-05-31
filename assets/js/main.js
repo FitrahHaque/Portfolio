@@ -200,7 +200,7 @@
     const syncMobileTocTop = () => {
       if (!aside) return;
       const topbar = document.querySelector(".topbar");
-      const top = (topbar ? topbar.offsetHeight : 0) + 12;
+      const top = topbar ? topbar.offsetHeight : 0;
       aside.style.setProperty("--mobile-toc-top", `${top}px`);
     };
 
@@ -233,6 +233,8 @@
 
     let lastScrollY = window.scrollY;
     let lastScrollTime = Date.now();
+    let isScrollingUp = false;
+    let isScrollingDownFast = false;
 
     const revealMobileToc = () => {
       if (!aside || !mobileTocQuery.matches) {
@@ -240,40 +242,8 @@
         return;
       }
 
-      const currentScroll = window.scrollY;
-      const currentTime = Date.now();
-      const diffY = currentScroll - lastScrollY;
-      const timeDiff = currentTime - lastScrollTime;
-
-      // If there has been a pause in scrolling (> 100ms), establish a new baseline
-      if (timeDiff > 100) {
-        lastScrollY = currentScroll;
-        lastScrollTime = currentTime;
-        return;
-      }
-
-      // Filter out micro-scroll events/accidental moves
-      if (Math.abs(diffY) > 2) {
-        let shouldReveal = false;
-
-        if (diffY < -2) {
-          // Scrolling up: always show the TOC overlay
-          shouldReveal = true;
-        } else if (diffY > 2 && timeDiff > 0) {
-          // Scrolling down: show only if scrolling fast (speed > 1.8 px/ms)
-          const speed = diffY / timeDiff;
-          if (speed > 1.8) {
-            shouldReveal = true;
-          }
-        }
-
-        // Update tracking baselines
-        lastScrollY = currentScroll;
-        lastScrollTime = currentTime;
-
-        if (shouldReveal) {
-          showMobileToc();
-        }
+      if (isScrollingUp || isScrollingDownFast) {
+        showMobileToc();
       }
     };
 
@@ -298,64 +268,20 @@
         // On desktop, show all links
         links.forEach(({ link }) => {
           link.style.display = "";
-        });
-        return;
-      }
-      
-      // On mobile, if we have more than 4 links, truncate to carousel window of 4 items
-      if (links.length <= 4) {
-        links.forEach(({ link }) => {
-          link.style.display = "";
+          link.style.removeProperty("--offset");
         });
         return;
       }
       
       const activeIndex = links.findIndex(({ link }) => link === activeLink);
-      if (activeIndex === -1) {
-        // Default to first 4 links if none is active yet
-        links.forEach(({ link }, idx) => {
-          link.style.display = idx < 4 ? "" : "none";
-        });
-        return;
-      }
+      const targetActiveIndex = activeIndex === -1 ? 0 : activeIndex;
 
-      // Calculate progress of current scroll inside the active target
-      let progress = 0;
-      const currentScroll = window.scrollY;
-      const activeTarget = snapTargets[activeIndex];
-      const nextTarget = snapTargets[activeIndex + 1];
-      
-      if (activeTarget) {
-        const y_curr = activeTarget.y;
-        const y_next = nextTarget ? nextTarget.y : document.documentElement.scrollHeight - window.innerHeight;
-        const dist = y_next - y_curr;
-        if (dist > 0) {
-          progress = (currentScroll - y_curr) / dist;
-        }
-      }
-
-      let start, end;
-      if (progress < 0.5) {
-        // Upper half of section: active element is in the second position of the 4 items
-        start = activeIndex - 1;
-        end = activeIndex + 2;
-      } else {
-        // Lower half of section: active element shifts to the top of the 4 items
-        start = activeIndex;
-        end = activeIndex + 3;
-      }
-      
-      // Cap the windows to bounds of links
-      if (start < 0) {
-        start = 0;
-        end = 3;
-      } else if (end >= links.length) {
-        end = links.length - 1;
-        start = Math.max(0, end - 3);
-      }
-      
       links.forEach(({ link }, idx) => {
-        if (idx >= start && idx <= end) {
+        const offset = idx - targetActiveIndex;
+        link.style.setProperty("--offset", offset);
+        
+        // Show the active item, up to 2 items above, and up to 2 items below
+        if (Math.abs(offset) <= 2) {
           link.style.display = "";
         } else {
           link.style.display = "none";
@@ -406,11 +332,13 @@
       updateSpacerHeight();
       snapTargets = links.map(link => {
         const targetY = link.target.getBoundingClientRect().top + window.scrollY;
+        const headingY = link.heading.getBoundingClientRect().top + window.scrollY;
         return {
           link: link.link,
           target: link.target,
           heading: link.heading,
-          y: Math.max(0, targetY - getTopOffset())
+          y: Math.max(0, targetY - getTopOffset()),
+          headingY: Math.max(0, headingY - getTopOffset())
         };
       });
     };
@@ -473,15 +401,27 @@
         return;
       }
 
-      let current = snapTargets[0];
       const currentScroll = window.scrollY;
-      for (const item of snapTargets) {
-        if (currentScroll >= item.y - 2) {
-          current = item;
-        } else {
-          break;
+      let current = null;
+
+      if (isScrollingUp || isScrollingDownFast) {
+        // Scrolling up or down fast: Find first heading visible / below current scroll position
+        current = snapTargets.find(item => item.headingY >= currentScroll);
+        if (!current && snapTargets.length > 0) {
+          current = snapTargets[snapTargets.length - 1];
+        }
+      } else {
+        // Default / normal scroll-spy
+        current = snapTargets[0];
+        for (const item of snapTargets) {
+          if (currentScroll >= item.headingY - 2) {
+            current = item;
+          } else {
+            break;
+          }
         }
       }
+
       if (current) {
         setActive(current.link);
       }
@@ -509,6 +449,27 @@
 
     let ticking = false;
     const onScroll = () => {
+      const currentScroll = window.scrollY;
+      const currentTime = Date.now();
+      const diffY = currentScroll - lastScrollY;
+      const timeDiff = currentTime - lastScrollTime;
+
+      if (timeDiff > 0 && Math.abs(diffY) > 2) {
+        isScrollingUp = diffY < -2;
+        const speed = Math.abs(diffY) / timeDiff;
+        isScrollingDownFast = diffY > 2 && speed > 1.8;
+
+        lastScrollY = currentScroll;
+        lastScrollTime = currentTime;
+      } else if (timeDiff > 100) {
+        isScrollingUp = false;
+        isScrollingDownFast = false;
+        lastScrollY = currentScroll;
+        lastScrollTime = currentTime;
+      }
+
+      revealMobileToc();
+
       if (!ticking) {
         ticking = true;
         window.requestAnimationFrame(() => {
@@ -527,7 +488,6 @@
     };
 
     window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("scroll", revealMobileToc, { passive: true });
     window.addEventListener("resize", onResize, { passive: true });
     window.addEventListener("load", onResize);
 
