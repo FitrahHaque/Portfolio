@@ -6,6 +6,8 @@
   let animationTimeoutId = null;
   let isAnimationSkipped = false;
   let typeLoopInitialized = false;
+  // 1 = name fully typed (sharp photo), 0 = name empty (most pixelated). Shared with initPixelate.
+  let nameTypedRatio = 1;
 
   const initTypeLoop = (forceNormal = false) => {
     const targets = document.querySelectorAll("#home [data-type-loop]");
@@ -27,6 +29,7 @@
 
       const render = () => {
         target.textContent = text.slice(0, visibleCount);
+        nameTypedRatio = text.length ? visibleCount / text.length : 1;
       };
 
       const tick = () => {
@@ -332,13 +335,15 @@
       updateSpacerHeight();
       snapTargets = links.map(link => {
         const targetY = link.target.getBoundingClientRect().top + window.scrollY;
+        const targetHeight = link.target.offsetHeight;
         const headingY = link.heading.getBoundingClientRect().top + window.scrollY;
         return {
           link: link.link,
           target: link.target,
           heading: link.heading,
           y: Math.max(0, targetY - getTopOffset()),
-          headingY: Math.max(0, headingY - getTopOffset())
+          headingY: Math.max(0, headingY - getTopOffset()),
+          targetBottom: Math.max(0, targetY + targetHeight - getTopOffset())
         };
       });
     };
@@ -402,8 +407,36 @@
       }
 
       const currentScroll = window.scrollY;
-      let current = null;
+      const isMobile = window.innerWidth <= 920;
 
+      if (!isMobile) {
+        // Desktop view: keep currently active item as active as long as its content is still on screen (not out of screen from above/below)
+        let activeItem = null;
+        if (activeLink) {
+          activeItem = snapTargets.find(item => item.link === activeLink);
+        }
+
+        if (activeItem && currentScroll >= activeItem.y - 2 && currentScroll < activeItem.targetBottom - 2) {
+          return;
+        }
+
+        // Otherwise, fall back to default desktop scroll-spy using headingY
+        let current = snapTargets[0];
+        for (const item of snapTargets) {
+          if (currentScroll >= item.headingY - 2) {
+            current = item;
+          } else {
+            break;
+          }
+        }
+        if (current) {
+          setActive(current.link);
+        }
+        return;
+      }
+
+      // Mobile view: directional scroll-spy rules
+      let current = null;
       if (isScrollingUp || isScrollingDownFast) {
         // Scrolling up or down fast: Find first heading visible / below current scroll position
         current = snapTargets.find(item => item.headingY >= currentScroll);
@@ -1253,12 +1286,117 @@
     updatePosition();
   };
 
+  // Pixelate/unpixelate the hero photo in lockstep with the name typing.
+  const initPixelate = () => {
+    const holder = document.querySelector("[data-pixelate]");
+    if (!holder) return;
+    const img = holder.querySelector("img");
+    if (!img) return;
+
+    const canvas = document.createElement("canvas");
+    canvas.setAttribute("aria-hidden", "true");
+    holder.appendChild(canvas);
+
+    const ctx = canvas.getContext("2d");
+    const base = document.createElement("canvas");
+    const bctx = base.getContext("2d");
+    const temp = document.createElement("canvas");
+    const tctx = temp.getContext("2d");
+    if (!ctx || !bctx || !tctx) return;
+
+    let w = 0;
+    let h = 0;
+    let ready = false;
+
+    // Render the image once, cover-fitted, at device resolution.
+    const buildBase = () => {
+      const iw = img.naturalWidth;
+      const ih = img.naturalHeight;
+      if (!iw || !ih) return false;
+
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const rect = holder.getBoundingClientRect();
+      w = Math.max(1, Math.round((rect.width || 72) * dpr));
+      h = Math.max(1, Math.round((rect.height || 72) * dpr));
+      canvas.width = w;
+      canvas.height = h;
+      base.width = w;
+      base.height = h;
+      temp.width = w;
+      temp.height = h;
+
+      const scale = Math.max(w / iw, h / ih);
+      const dw = iw * scale;
+      const dh = ih * scale;
+      bctx.clearRect(0, 0, w, h);
+      bctx.imageSmoothingEnabled = true;
+      bctx.drawImage(img, (w - dw) / 2, (h - dh) / 2, dw, dh);
+      ready = true;
+      return true;
+    };
+
+    // cell = 1 -> sharp; larger -> chunkier blocks.
+    const drawCell = (cell) => {
+      const cols = Math.max(1, Math.round(w / cell));
+      const rows = Math.max(1, Math.round(h / cell));
+      tctx.clearRect(0, 0, w, h);
+      tctx.imageSmoothingEnabled = true;
+      tctx.drawImage(base, 0, 0, w, h, 0, 0, cols, rows);
+      ctx.clearRect(0, 0, w, h);
+      ctx.imageSmoothingEnabled = false;
+      ctx.drawImage(temp, 0, 0, cols, rows, 0, 0, w, h);
+    };
+
+    let lastCell = -1;
+    const frame = () => {
+      if (ready) {
+        const maxCell = Math.max(6, w / 9);
+        // Mirror the name: fully typed -> sharp; empty -> most pixelated.
+        const amount = Math.min(1, Math.max(0, 1 - nameTypedRatio));
+        const cell = 1 + (maxCell - 1) * Math.pow(amount, 1.25);
+        if (Math.abs(cell - lastCell) > 0.05) {
+          drawCell(cell);
+          lastCell = cell;
+        }
+      }
+      window.requestAnimationFrame(frame);
+    };
+
+    const activate = () => {
+      if (buildBase()) {
+        holder.classList.add("is-pixelating");
+        lastCell = -1;
+      }
+    };
+
+    if (img.complete && img.naturalWidth) activate();
+    img.addEventListener("load", activate);
+    window.addEventListener("load", activate);
+    window.setTimeout(activate, 300);
+
+    let resizeTimer = 0;
+    window.addEventListener(
+      "resize",
+      () => {
+        window.clearTimeout(resizeTimer);
+        resizeTimer = window.setTimeout(() => {
+          buildBase();
+          lastCell = -1;
+        }, 150);
+      },
+      { passive: true }
+    );
+
+    window.requestAnimationFrame(frame);
+  };
+
   const init = () => {
     const isAnimatedNav = document.documentElement.classList.contains("use-type-animation");
     
     initCursorBlink();
     initCopyEmail();
     initPageToc();
+    initPixelate();
 
     if (isAnimatedNav) {
       startTypeAnimation();

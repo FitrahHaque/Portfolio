@@ -6,7 +6,12 @@
 <section id="home" class="hero-section" aria-label="Introduction">
   <div class="hero-copy">
     <div class="hero-identity">
-      <img class="hero-mark" src="{{ $profile.photo | relURL }}" width="72" height="72" alt="Portrait mark for {{ $profile.name }}">
+      <div class="hero-mark" data-pixelate>
+        <picture>
+          <source srcset="{{ "profile.webp" | relURL }}" type="image/webp">
+          <img src="{{ "profile.png" | relURL }}" width="72" height="72" alt="Portrait of {{ $profile.name }}" loading="eager" decoding="async">
+        </picture>
+      </div>
       <div class="hero-heading">
         <h1 class="type-loop" aria-label="{{ $profile.name }}" style="--name-ch: {{ len $profile.name }}ch;">
           <span data-type-loop data-type-text="{{ $profile.name }}" aria-hidden="true">{{ $profile.name }}</span>

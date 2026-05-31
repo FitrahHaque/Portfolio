@@ -371,12 +371,41 @@ h3 span {
 }
 
 .hero-mark {
+  position: relative;
+  flex: 0 0 auto;
   width: 4.75rem;
   height: 4.75rem;
+  overflow: hidden;
   border: 1px solid var(--border-strong);
   border-radius: 8px;
   background: rgba(17, 29, 34, .35);
+}
+
+.hero-mark picture {
+  display: contents;
+}
+
+.hero-mark img,
+.hero-mark canvas {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
+}
+
+.hero-mark canvas {
+  opacity: 0;
+  transition: opacity .25s ease;
+}
+
+.hero-mark.is-pixelating canvas {
+  opacity: 1;
+}
+
+.hero-mark.is-pixelating img {
+  opacity: 0;
 }
 
 .cursor-name::after {
