@@ -9,7 +9,7 @@
       <span data-copy-email-label>Email</span>
     </button>
   {{ end }}
-  <a class="text-action" href="{{ $profile.resumeUrl | relURL }}">
+  <a class="text-action" href="{{ $profile.resumeUrl | relURL }}" download="Asif_Haque_Resume.pdf" target="_blank" rel="noreferrer noopener">
     {{ partial "icon.html" "download" }}
     Resume
   </a>

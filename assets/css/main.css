@@ -688,7 +688,7 @@ h3 span {
 }
 
 .tag-list::before {
-  display: inline-flex;
+  display: none;
   align-items: center;
   min-height: 1.35rem;
   margin-right: .05rem;
@@ -838,6 +838,13 @@ h3 span {
     padding-top: 1rem;
   }
 
+  .hero-copy,
+  .hero-heading,
+  .lead {
+    min-width: 0;
+    max-width: 100%;
+  }
+
   .page-layout,
   .page-layout:has(.page-toc:not([hidden])) {
     grid-template-columns: 1fr;
@@ -846,29 +853,29 @@ h3 span {
 
   .page-toc {
     position: fixed;
-    top: var(--mobile-toc-top, 4.75rem);
-    left: 0;
+    top: 50%;
+    left: 50%;
     z-index: 18;
-    width: min(15.5rem, calc(100vw - 1.5rem));
-    max-height: calc(100dvh - var(--mobile-toc-top, 4.75rem) - .75rem);
-    padding: .85rem .85rem .9rem .75rem;
-    border: 1px solid rgba(60, 83, 92, .68);
-    border-left: 0;
-    border-radius: 0 var(--radius) var(--radius) 0;
-    background: rgba(11, 20, 23, .93);
-    box-shadow: 0 16px 34px rgba(0, 0, 0, .34);
-    backdrop-filter: blur(14px);
+    width: min(16rem, calc(100vw - 3rem));
+    max-height: calc(100dvh - 4rem);
+    padding: 1.25rem 1.25rem 1.35rem 1.25rem;
+    border: none;
+    border-radius: 0;
+    background: rgba(11, 20, 23, 0.25);
+    box-shadow: none;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     overflow-y: auto;
     opacity: 0;
     pointer-events: none;
-    transform: translateX(calc(-100% - 1px));
+    transform: translate(-50%, -50%) scale(0.95);
     transition: opacity .26s ease, transform .32s ease;
   }
 
   .page-toc.is-mobile-visible {
     opacity: 1;
     pointer-events: auto;
-    transform: translateX(0);
+    transform: translate(-50%, -50%) scale(1);
   }
 
   .page-toc-title {
@@ -905,7 +912,27 @@ h3 span {
   }
 
   .hero-identity {
+    align-items: flex-start;
     gap: .8rem;
+  }
+
+  .type-loop {
+    display: block;
+    height: auto;
+    min-width: 0;
+    max-width: 100%;
+    line-height: 1.08;
+    overflow-wrap: anywhere;
+  }
+
+  .type-loop span[data-type-loop] {
+    display: inline;
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+
+  .type-loop::after {
+    vertical-align: -.06em;
   }
 
 

@@ -245,12 +245,61 @@
       mobileTocQuery.addListener(onMobileTocViewportChange);
     }
 
+    const updateTocTruncation = () => {
+      const isMobile = window.innerWidth <= 920;
+      
+      if (!isMobile) {
+        // On desktop, show all links
+        links.forEach(({ link }) => {
+          link.style.display = "";
+        });
+        return;
+      }
+      
+      // On mobile, if we have more than 3 links, truncate to show active + 1 before + 1 after
+      if (links.length <= 3) {
+        links.forEach(({ link }) => {
+          link.style.display = "";
+        });
+        return;
+      }
+      
+      const activeIndex = links.findIndex(({ link }) => link === activeLink);
+      if (activeIndex === -1) {
+        // Default to first 3 links if none is active yet
+        links.forEach(({ link }, idx) => {
+          link.style.display = idx < 3 ? "" : "none";
+        });
+        return;
+      }
+      
+      let start = activeIndex - 1;
+      let end = activeIndex + 1;
+      
+      if (start < 0) {
+        start = 0;
+        end = 2;
+      } else if (end >= links.length) {
+        end = links.length - 1;
+        start = links.length - 3;
+      }
+      
+      links.forEach(({ link }, idx) => {
+        if (idx >= start && idx <= end) {
+          link.style.display = "";
+        } else {
+          link.style.display = "none";
+        }
+      });
+    };
+
     let activeLink = null;
     const setActive = (link) => {
       if (link === activeLink) return;
       if (activeLink) activeLink.classList.remove("is-active");
       if (link) link.classList.add("is-active");
       activeLink = link;
+      updateTocTruncation();
     };
 
     const getTopOffset = () => {
@@ -402,6 +451,7 @@
     const onResize = () => {
       syncMobileTocTop();
       updateSnapTargets();
+      updateTocTruncation();
       onScroll();
     };
 
@@ -412,10 +462,12 @@
 
     updateSnapTargets();
     updateActive();
+    updateTocTruncation();
 
     window.requestAnimationFrame(() => {
       updateSnapTargets();
       updateActive();
+      updateTocTruncation();
     });
     window.setTimeout(onResize, 250);
 
