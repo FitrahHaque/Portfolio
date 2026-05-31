@@ -128,43 +128,129 @@
       return (topbar ? topbar.offsetHeight : 0) + 4;
     };
 
-    const snapToTarget = (target) => {
-      const targetY = Math.max(
-        0,
-        window.scrollY + target.getBoundingClientRect().top - getTopOffset()
-      );
-      window.scrollTo({ top: targetY, behavior: "smooth" });
+    let snapTargets = [];
+    const spacer = document.createElement("div");
+    spacer.className = "toc-scroll-spacer";
+    spacer.setAttribute("aria-hidden", "true");
+    content.appendChild(spacer);
+
+    const updateSpacerHeight = () => {
+      const last = links[links.length - 1];
+      if (!last) return;
+
+      const lastTarget = last.target;
+      const lastTargetY = lastTarget.getBoundingClientRect().top + window.scrollY;
+      const lastScrollTargetY = Math.max(0, lastTargetY - getTopOffset());
+
+      const documentHeightWithoutSpacer = document.documentElement.scrollHeight - spacer.offsetHeight;
+      const maxScrollWithoutSpacer = documentHeightWithoutSpacer - window.innerHeight;
+
+      const extra = lastScrollTargetY - maxScrollWithoutSpacer;
+      const newHeight = extra > 0 ? Math.ceil(extra) + 20 : 0;
+
+      if (spacer.style.height !== `${newHeight}px`) {
+        spacer.style.height = `${newHeight}px`;
+      }
     };
+
+    const updateSnapTargets = () => {
+      updateSpacerHeight();
+      snapTargets = links.map(link => {
+        const targetY = link.target.getBoundingClientRect().top + window.scrollY;
+        return {
+          link: link.link,
+          target: link.target,
+          heading: link.heading,
+          y: Math.max(0, targetY - getTopOffset())
+        };
+      });
+    };
+
+    let currentAnimationId = null;
+    const animateScroll = (targetY, duration = 1200) => {
+      if (currentAnimationId) {
+        cancelAnimationFrame(currentAnimationId);
+      }
+
+      const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if (prefersReducedMotion) {
+        window.scrollTo(0, targetY);
+        return;
+      }
+
+      const startY = window.scrollY;
+      const distance = targetY - startY;
+      if (Math.abs(distance) < 1) return;
+
+      const startTime = performance.now();
+      const easeOutQuint = (t) => 1 - Math.pow(1 - t, 5);
+
+      const step = (currentTime) => {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const ease = easeOutQuint(progress);
+
+        window.scrollTo(0, startY + distance * ease);
+
+        if (progress < 1) {
+          currentAnimationId = requestAnimationFrame(step);
+        } else {
+          currentAnimationId = null;
+        }
+      };
+
+      currentAnimationId = requestAnimationFrame(step);
+    };
+
+    const cancelActiveAnimation = () => {
+      if (currentAnimationId) {
+        cancelAnimationFrame(currentAnimationId);
+        currentAnimationId = null;
+      }
+    };
+
+    window.addEventListener("wheel", cancelActiveAnimation, { passive: true });
+    window.addEventListener("touchmove", cancelActiveAnimation, { passive: true });
+    window.addEventListener("mousedown", cancelActiveAnimation, { passive: true });
+    window.addEventListener("keydown", cancelActiveAnimation, { passive: true });
 
     let lockUntil = 0;
     const updateActive = () => {
       if (Date.now() < lockUntil) return;
       const scrollable = document.documentElement.scrollHeight - window.innerHeight;
       const atBottom = scrollable > 40 && window.scrollY >= scrollable - 4;
-      if (atBottom) {
-        setActive(links[links.length - 1].link);
+      if (atBottom && snapTargets.length > 0) {
+        setActive(snapTargets[snapTargets.length - 1].link);
         return;
       }
 
-      let current = links[0];
-      const offset = getTopOffset() + 2;
-      for (const item of links) {
-        if (item.target.getBoundingClientRect().top - offset <= 0) {
+      let current = snapTargets[0];
+      const currentScroll = window.scrollY;
+      for (const item of snapTargets) {
+        if (currentScroll >= item.y - 2) {
           current = item;
         } else {
           break;
         }
       }
-      setActive(current.link);
+      if (current) {
+        setActive(current.link);
+      }
     };
 
     links.forEach(({ heading, target, link }) => {
       link.addEventListener("click", (event) => {
         event.preventDefault();
+        
+        updateSnapTargets();
+        
         setActive(link);
-        lockUntil = Date.now() + 700;
-        ensureScrollRoom();
-        snapToTarget(target);
+        lockUntil = Date.now() + 1300;
+        
+        const snapTarget = snapTargets.find(t => t.heading === heading);
+        if (snapTarget) {
+          animateScroll(snapTarget.y, 1200);
+        }
 
         if (history.replaceState) {
           history.replaceState(null, "", `#${heading.id}`);
@@ -172,47 +258,31 @@
       });
     });
 
-    const spacer = document.createElement("div");
-    spacer.className = "toc-scroll-spacer";
-    spacer.setAttribute("aria-hidden", "true");
-    content.appendChild(spacer);
-
-    const ensureScrollRoom = () => {
-      spacer.style.height = "0px";
-      const last = links[links.length - 1].target;
-      const targetY = Math.max(
-        0,
-        window.scrollY + last.getBoundingClientRect().top - getTopOffset()
-      );
-      const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
-      const buffer = Math.max(96, window.innerHeight * 0.18);
-      const extra = targetY - maxScroll + buffer;
-      spacer.style.height = extra > 0 ? `${Math.ceil(extra)}px` : "0px";
-    };
-
     let ticking = false;
     const onScroll = () => {
-      if (ticking) return;
-      ticking = true;
-      window.requestAnimationFrame(() => {
-        updateActive();
-        ticking = false;
-      });
+      if (!ticking) {
+        ticking = true;
+        window.requestAnimationFrame(() => {
+          updateActive();
+          ticking = false;
+        });
+      }
     };
 
     const onResize = () => {
-      ensureScrollRoom();
+      updateSnapTargets();
       onScroll();
     };
 
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", onResize, { passive: true });
     window.addEventListener("load", onResize);
-    ensureScrollRoom();
+
+    updateSnapTargets();
     updateActive();
 
     window.requestAnimationFrame(() => {
-      ensureScrollRoom();
+      updateSnapTargets();
       updateActive();
     });
     window.setTimeout(onResize, 250);
@@ -221,9 +291,12 @@
       const hashTarget = links.find(({ heading }) => `#${heading.id}` === window.location.hash);
       if (hashTarget) {
         window.setTimeout(() => {
-          ensureScrollRoom();
-          snapToTarget(hashTarget.target);
-          setActive(hashTarget.link);
+          updateSnapTargets();
+          const snapTarget = snapTargets.find(t => t.heading === hashTarget.heading);
+          if (snapTarget) {
+            animateScroll(snapTarget.y, 1200);
+            setActive(snapTarget.link);
+          }
         }, 80);
       }
     }
