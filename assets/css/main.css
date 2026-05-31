@@ -190,13 +190,18 @@ ul {
   margin-left: 1.45rem;
 }
 
-.top-nav a:hover,
 .top-nav a.is-active {
   color: var(--accent);
 }
 
 .top-nav a.is-active {
   font-weight: 600;
+}
+
+@media (hover: hover) {
+  .top-nav a:hover {
+    color: var(--accent);
+  }
 }
 
 .text-action,
@@ -1127,9 +1132,13 @@ h3 span {
     padding: 1.75rem 0;
   }
 
+  .hero-actions,
+  .contact-links {
+    row-gap: 1.35rem;
+  }
+
   .hero-actions {
     column-gap: 1rem;
-    row-gap: .65rem;
   }
 
   .site-footer {

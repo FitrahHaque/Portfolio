@@ -16,9 +16,7 @@
   {{ if eq $key "about" }}
     <div class="about-grid">
       <div class="prose">
-        {{ range $data.about.paragraphs }}
-          <p>{{ . }}</p>
-        {{ end }}
+        {{ .Content }}
       </div>
       <dl class="highlights">
         {{ range $data.about.highlights }}

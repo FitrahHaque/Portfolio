@@ -161,6 +161,73 @@
     });
   };
 
+  const initTopNavTouch = () => {
+    // Any tap on the brand name or a nav link while already on the home page
+    // should bypass the typing animation (same as back/forward navigation does).
+    const brand = document.querySelector(".brand[href]");
+    if (brand) {
+      brand.addEventListener("click", () => {
+        try { sessionStorage.setItem("skip-type-anim", "1"); } catch (_) {}
+      });
+      brand.addEventListener("touchend", () => {
+        try { sessionStorage.setItem("skip-type-anim", "1"); } catch (_) {}
+      }, { passive: true });
+    }
+
+    const links = document.querySelectorAll(".top-nav a[href]");
+    if (!links.length) return;
+
+    let touchStart = null;
+    const tapDistance = 10;
+
+    links.forEach((link) => {
+      if (link.dataset.topNavTouchReady === "true") return;
+      link.dataset.topNavTouchReady = "true";
+
+      link.addEventListener("touchstart", (event) => {
+        if (event.touches.length !== 1) {
+          touchStart = null;
+          return;
+        }
+
+        const touch = event.touches[0];
+        touchStart = {
+          link,
+          x: touch.clientX,
+          y: touch.clientY
+        };
+      }, { passive: true });
+
+      link.addEventListener("touchend", (event) => {
+        if (!touchStart || touchStart.link !== link || event.changedTouches.length !== 1) {
+          touchStart = null;
+          return;
+        }
+
+        const touch = event.changedTouches[0];
+        const moved = Math.hypot(touch.clientX - touchStart.x, touch.clientY - touchStart.y) > tapDistance;
+        touchStart = null;
+        if (moved) return;
+
+        const href = link.getAttribute("href");
+        if (!href) return;
+
+        const target = new URL(href, window.location.href);
+        if (target.href === window.location.href) return;
+
+        // Let the home page know not to run the typing animation for this tap.
+        try { sessionStorage.setItem("skip-type-anim", "1"); } catch (_) {}
+
+        event.preventDefault();
+        window.location.assign(target.href);
+      });
+
+      link.addEventListener("touchcancel", () => {
+        touchStart = null;
+      }, { passive: true });
+    });
+  };
+
   const initPageToc = () => {
     const nav = document.querySelector("[data-toc]");
     const content = document.querySelector("[data-toc-content]");
@@ -182,11 +249,10 @@
 
     const used = new Set();
     const links = headings.map((heading) => {
-      let label = heading.textContent.trim();
-      const firstNode = heading.childNodes[0];
-      if (heading.querySelector("span") && firstNode && firstNode.textContent.trim()) {
-        label = firstNode.textContent.trim();
-      }
+      // Build label from visible text only — skip aria-hidden spans (e.g. ↗ arrows).
+      const clone = heading.cloneNode(true);
+      clone.querySelectorAll("[aria-hidden]").forEach((el) => el.remove());
+      const label = clone.textContent.trim();
 
       const base = slugify(label) || "section";
       let id = base;
@@ -237,6 +303,14 @@
       aside.classList.remove("is-mobile-visible");
     };
 
+    const scheduleMobileTocHide = () => {
+      if (mobileTocHideTimeout) window.clearTimeout(mobileTocHideTimeout);
+      mobileTocHideTimeout = window.setTimeout(() => {
+        if (aside) aside.classList.remove("is-mobile-visible");
+        mobileTocHideTimeout = null;
+      }, 950);
+    };
+
     const showMobileToc = () => {
       if (!aside || !mobileTocQuery.matches) {
         hideMobileToc();
@@ -244,15 +318,9 @@
       }
 
       syncMobileTocTop();
+      // Bring it into view and (re)start the idle-hide countdown.
       aside.classList.add("is-mobile-visible");
-
-      if (mobileTocHideTimeout) {
-        window.clearTimeout(mobileTocHideTimeout);
-      }
-      mobileTocHideTimeout = window.setTimeout(() => {
-        aside.classList.remove("is-mobile-visible");
-        mobileTocHideTimeout = null;
-      }, 950);
+      scheduleMobileTocHide();
     };
 
     let lastScrollY = window.scrollY;
@@ -523,6 +591,11 @@
       }
 
       revealMobileToc();
+
+      // Keep the mobile TOC alive while the user is still scrolling.
+      if (aside && aside.classList.contains("is-mobile-visible") && mobileTocQuery.matches) {
+        scheduleMobileTocHide();
+      }
 
       if (!ticking) {
         ticking = true;
@@ -1417,6 +1490,7 @@
     initCursorBlink();
     initCopyEmail();
     initEntryLinks();
+    initTopNavTouch();
     initPageToc();
     initPixelate();
 
