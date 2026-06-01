@@ -9,23 +9,13 @@
     <p class="page-toc-title">On this page</p>
     <nav class="page-toc-nav" data-toc aria-label="{{ .Title }} contents"></nav>
   </aside>
-  <article class="page-view" data-toc-content>
+  <article class="page-view{{ if eq $key "about" }} page-view-about{{ end }}" data-toc-content>
   <a class="crumb" href="{{ site.Home.RelPermalink }}">Home</a>
   {{ partial "section-heading.html" (dict "eyebrow" .Params.eyebrow "title" .Title) }}
 
   {{ if eq $key "about" }}
-    <div class="about-grid">
-      <div class="prose">
-        {{ .Content }}
-      </div>
-      <dl class="highlights">
-        {{ range $data.about.highlights }}
-          <div>
-            <dt>{{ .label }}</dt>
-            <dd>{{ .value }}</dd>
-          </div>
-        {{ end }}
-      </dl>
+    <div class="prose">
+      {{ .Content }}
     </div>
   {{ else if eq $key "experience" }}
     <div class="entry-list">

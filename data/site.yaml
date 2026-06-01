@@ -1,9 +1,9 @@
 profile:
   name: Asif Ihtemadul Haque
   initials: AH
-  role: Software Engineer & Research Student
+  role: Software Engineer & Research Student @ UWO
   photo: profile.png
-  tagline: Software engineer and research student working at the intersection of machine learning and AI. My research focuses on optimizing future environmental embedding representations for crop performance prediction.
+  tagline: Software engineer and MSc research student working on machine learning for bioinformatics, while staying deeply interested in systems, backend engineering, and the craft of building reliable software
   location: Research and engineering opportunities
   email: asifihtemadulhaque@gmail.com
   resumeUrl: resume.pdf

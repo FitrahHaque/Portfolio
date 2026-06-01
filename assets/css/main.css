@@ -261,15 +261,12 @@ ul {
 }
 
 .hero-section {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 15rem;
-  align-items: start;
-  gap: 2rem;
+  display: block;
   padding: 2.35rem 0 2.1rem;
 }
 
 .hero-copy {
-  max-width: 720px;
+  max-width: 880px;
 }
 
 .hero-identity {
@@ -335,7 +332,7 @@ h3 span {
 }
 
 .lead {
-  max-width: 660px;
+  max-width: 800px;
   margin-top: .9rem;
   color: var(--muted);
   font-size: .9rem;
@@ -624,8 +621,44 @@ h3 span {
   line-height: 1.65;
 }
 
+.prose h2 {
+  margin-top: 1.85rem;
+  margin-bottom: 0.15rem;
+  color: var(--accent-2);
+}
+
+.page-view-about .section-heading h2 {
+  color: var(--accent);
+}
+
 .prose p {
   color: inherit;
+}
+
+.about-closing {
+  margin-top: 2.25rem;
+  display: grid;
+  gap: .75rem;
+}
+
+.prose a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: .2em;
+}
+
+.prose a:hover {
+  color: var(--text);
+}
+
+.prose em {
+  font-style: italic;
+  color: var(--text);
+}
+
+.prose strong {
+  color: var(--text);
+  font-weight: 600;
 }
 
 .highlights {
@@ -910,8 +943,7 @@ h3 span {
   }
 
   .hero-copy,
-  .hero-heading,
-  .lead {
+  .hero-heading {
     min-width: 0;
     max-width: 100%;
   }
@@ -1161,7 +1193,7 @@ h3 span {
 .use-type-animation .entry,
 .use-type-animation .skill-row,
 .use-type-animation .crumb,
-.use-type-animation .about-grid .prose p,
+.use-type-animation .about-grid .prose,
 .use-type-animation .about-grid .highlights > div,
 .use-type-animation .contact-row,
 .use-type-animation .contact-section p,

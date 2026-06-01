@@ -27,23 +27,6 @@
     </p>
     {{ partial "contact-links.html" (dict "profile" $profile "facts" $data.heroFacts "class" "hero-actions" "label" "Primary links" "page" $) }}
   </div>
-  <aside class="hero-panel" aria-label="Profile summary">
-    <dl>
-      {{ range $data.heroFacts }}
-        <div>
-          <dt>{{ .label }}</dt>
-          <dd>
-            {{ if .href }}
-              {{ $external := or (hasPrefix .href "http://") (hasPrefix .href "https://") }}
-              <a href="{{ .href }}"{{ if $external }} target="_blank" rel="noreferrer noopener"{{ end }}>{{ .value }}</a>
-            {{ else }}
-              {{ .value }}
-            {{ end }}
-          </dd>
-        </div>
-      {{ end }}
-    </dl>
-  </aside>
 </section>
 
 <section id="research" class="content-section">

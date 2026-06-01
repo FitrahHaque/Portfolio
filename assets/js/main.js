@@ -918,9 +918,7 @@
         }
       });
       addToQueue("#home .hero-copy .lead", "type");
-      addToQueue("#home .hero-panel", "fade");
       addToQueue("#home .hero-copy .hero-actions", "fade");
-      addMultipleToQueue("#home .hero-panel dl > div", "type");
 
       const sections = ["#research", "#projects", "#blog", "#experience", "#skills", "#education", "#contact"];
       sections.forEach(secId => {
@@ -956,8 +954,7 @@
       addToQueue(".page-view .section-heading", "type");
       addToQueue(".page-view .post-header", "type");
       addToQueue(".page-view .post-content", "type");
-      addMultipleToQueue(".page-view .about-grid .prose p", "type");
-      addMultipleToQueue(".page-view .about-grid .highlights > div", "type");
+      addToQueue(".page-view .prose", "type");
       addMultipleToQueue(".page-view .entry", "type");
       addMultipleToQueue(".page-view .skill-row", "type");
       addToQueue(".page-view .contact-row", "type");
