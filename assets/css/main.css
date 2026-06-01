@@ -332,6 +332,8 @@ h3 span {
 }
 
 .lead {
+  display: grid;
+  gap: .55rem;
   max-width: 800px;
   margin-top: .9rem;
   color: var(--muted);
@@ -339,11 +341,20 @@ h3 span {
   line-height: 1.65;
 }
 
+.lead > p {
+  margin: 0;
+}
+
+.lead .read-more-link {
+  margin-left: 0;
+  font-size: inherit;
+}
+
 .read-more-link {
   display: inline-flex;
-  align-items: baseline;
+  align-items: center;
   gap: .32rem;
-  margin-left: .35rem;
+  width: fit-content;
   color: var(--accent);
   font-family: var(--font-mono);
   font-size: .78rem;
@@ -627,7 +638,10 @@ h3 span {
   color: var(--accent-2);
 }
 
-.page-view-about .section-heading h2 {
+.page-view-about .section-heading h2,
+.page-view-blog .section-heading h2,
+.page-view-projects .section-heading h2,
+.page-view-research .section-heading h2 {
   color: var(--accent);
 }
 
@@ -1145,10 +1159,6 @@ h3 span {
   .hero-mark {
     width: 3.75rem;
     height: 3.75rem;
-  }
-
-  .read-more-link {
-    margin-left: 0;
   }
 
   h2 {

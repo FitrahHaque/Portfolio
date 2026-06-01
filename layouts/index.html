@@ -19,12 +19,10 @@
         <p class="eyebrow">{{ $profile.role }}</p>
       </div>
     </div>
-    <p class="lead">
-      {{ $profile.tagline }}
-      <a class="read-more-link" href="{{ "about/" | relURL }}" aria-label="Learn more about {{ $profile.name }}">
-        Learn more about me here <span aria-hidden="true">↗</span>
-      </a>
-    </p>
+    <div class="lead">
+      <p>{{ $profile.tagline }}</p>
+      <a class="read-more-link" href="{{ "about/" | relURL }}" aria-label="Learn more about {{ $profile.name }}">Learn more about me here <span aria-hidden="true">↗</span></a>
+    </div>
     {{ partial "contact-links.html" (dict "profile" $profile "facts" $data.heroFacts "class" "hero-actions" "label" "Primary links" "page" $) }}
   </div>
 </section>
