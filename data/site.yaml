@@ -51,83 +51,103 @@ about:
       value: Reproducible work
 
 experience:
-  - role: Research Student
-    company: University Research Lab
-    location: ""
-    start: "2024"
+  - role: Graduate Teaching Assistant
+    company: Western University
+    location: Ontario, Canada
+    start: Jan 2025
+    end: Apr 2026
+    bullets:
+      - Instructed and graded students in course content covering Software Tools and Systems Programming, Information Systems and Design, and Specification, Testing and Quality.
+    tags:
+      - Systems Programming
+      - Software Engineering
+      - Quality Assurance
+  - role: Research Scholar
+    company: Western University
+    location: Ontario, Canada
+    start: Jan 2025
     end: Present
     bullets:
-      - Conducting research on future environmental embedding representations for crop performance prediction.
+      - Researching machine learning and AI approaches for forecasting environmental embeddings to improve crop performance prediction under the supervision of Dr. Mike Domaratzki.
       - Designing reproducible ML experiments and evaluating model generalization across regions and seasons.
       - Building data pipelines and tooling to support large-scale environmental datasets.
     tags:
       - Python
       - PyTorch
+      - Machine Learning
       - Research
-  - role: Software Engineer
-    company: Selected engineering work
-    location: ""
-    start: "2022"
-    end: "2024"
+  - role: Software Engineer L2
+    company: Chaldal
+    location: Bangladesh
+    start: Jun 2024
+    end: Dec 2024
     bullets:
-      - Developed and maintained production software with an emphasis on reliability and testing.
-      - Collaborated across teams to ship features and improve developer tooling.
-      - Contributed to code reviews, documentation, and engineering standards.
+      - Built a customer lifecycle state machine to identify high-propensity buyers, delivering higher contact-to-order conversion and faster time-to-first-contact.
+      - Developed a type-safe workflow in F# and TypeScript, cutting change-related defects and accelerating delivery.
+      - Orchestrated cross-service cron and RPC with idempotency; deployed on Service Fabric.
     tags:
+      - F#
       - TypeScript
-      - React
-      - Node.js
+      - Service Fabric
+      - C#
+      - Backend
 
 skills:
   - category: Languages
     items:
+      - Golang
+      - C/C++
       - Python
-      - TypeScript
+      - Java
       - JavaScript
-      - SQL
-      - C++
-  - category: Frameworks
+      - F#
+      - C#
+      - TypeScript
+  - category: Frameworks & Web
     items:
       - React
-      - Node.js
-      - FastAPI
-      - Vite
-      - Tailwind CSS
-  - category: ML / AI
+      - Nextjs
+      - Django
+  - category: Distributed Systems & Backend
     items:
-      - PyTorch
-      - scikit-learn
-      - NumPy
-      - Hugging Face
-      - XGBoost
-  - category: Data
+      - .NET
+      - Service Fabric
+      - gRPC
+  - category: Cloud & Infrastructure
     items:
-      - Pandas
-      - Polars
-      - DuckDB
-      - PostgreSQL
-      - Jupyter
+      - AWS
+      - Terraform
+      - Docker
   - category: Developer Tools
     items:
       - Git
-      - Docker
-      - Linux
-      - GitHub Actions
-      - VS Code
+      - Bash
+      - Assembly
+  - category: Soft Skills
+    items:
+      - Critical thinking
+      - Collaboration
+      - Ownership
 
 education:
-  - degree: Degree / Program
-    institution: University
+  - degree: MSc in Computer Science
+    institution: Western University
     location: ""
-    start: "2023"
-    end: Present
-    details:
-      - "Research focus: machine learning for environmental and agricultural prediction."
-      - "Thesis: optimizing future environmental embedding representations for crop performance."
-  - degree: B.Sc. in Computer Science
-    institution: University
+    period: 2025 - Aug 2026
+    tocLabel: Masters
+    summary: I am currently pursuing my MSc in Computer Science at Western University, where I work with Dr. Mike Domaratzki on machine learning methods for representing future environmental conditions in crop performance prediction.
+    courses:
+      - name: Distributed Systems
+        description: Studied distributed-system design through Martin Kleppmann's and Andrew Tanenbaum's books. For the course project, I built a distributed lock service from scratch using the Raft consensus algorithm.
+      - name: Image Compression
+        description: Explored different compression techniques out of a strong interest in how expert software engineers optimize compression engines for specific data-transfer requirements.
+      - name: Reinforcement Learning
+        description: Studied reinforcement-learning methods including Q-learning and Proximal Policy Optimization (PPO).
+      - name: Machine Learning and Cybersecurity
+        description: Studied different classes of cyberattacks and how machine-learning methods can support cybersecurity, anticipating the growing importance of this area.
+  - degree: BSc in Computer Science and Engineering
+    institution: Bangladesh University of Engineering and Technology
     location: ""
-    start: "2019"
-    end: "2023"
-    details:
-      - Coursework in algorithms, machine learning, and software engineering.
+    period: Completed June 2024
+    tocLabel: Bachelors
+    summary: I completed my undergraduate degree at BUET. That is where I built much of my foundation in algorithms, programming, systems, and the kind of problem solving that still shapes how I work today.

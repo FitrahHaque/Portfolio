@@ -1,0 +1,23 @@
+<article class="entry education-entry">
+  <div class="entry-date">{{ with .period }}{{ . }}{{ else }}{{ .start }} - {{ .end }}{{ end }}</div>
+  <div class="entry-body">
+    <h3{{ with .tocLabel }} data-toc-label="{{ . }}"{{ end }}>{{ .degree }} <span>/ {{ .institution }}</span></h3>
+    {{ with .location }}<p class="entry-meta">{{ . }}</p>{{ end }}
+    {{ with .summary }}
+      <p class="education-summary">{{ . }}</p>
+    {{ end }}
+    {{ with .courses }}
+      <section class="coursework" aria-label="Selected coursework">
+        <h4>Selected coursework</h4>
+        <div class="course-list">
+          {{ range . }}
+            <div class="course-item">
+              <h5>{{ .name }}</h5>
+              <p>{{ .description }}</p>
+            </div>
+          {{ end }}
+        </div>
+      </section>
+    {{ end }}
+  </div>
+</article>

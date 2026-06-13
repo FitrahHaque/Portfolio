@@ -47,18 +47,7 @@
   {{ else if eq $key "education" }}
     <div class="entry-list">
       {{ range $data.education }}
-        <article class="entry">
-          <div class="entry-date">{{ .start }} - {{ .end }}</div>
-          <div class="entry-body">
-            <h3>{{ .degree }} <span>/ {{ .institution }}</span></h3>
-            {{ with .location }}<p class="entry-meta">{{ . }}</p>{{ end }}
-            <ul class="detail-list">
-              {{ range .details }}
-                <li>{{ . }}</li>
-              {{ end }}
-            </ul>
-          </div>
-        </article>
+        {{ partial "education-entry.html" . }}
       {{ end }}
     </div>
   {{ else if eq $key "contact" }}

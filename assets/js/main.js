@@ -252,7 +252,7 @@
       // Build label from visible text only — skip aria-hidden spans (e.g. ↗ arrows).
       const clone = heading.cloneNode(true);
       clone.querySelectorAll("[aria-hidden]").forEach((el) => el.remove());
-      const label = clone.textContent.trim();
+      const label = heading.dataset.tocLabel || clone.textContent.trim();
 
       const base = slugify(label) || "section";
       let id = base;

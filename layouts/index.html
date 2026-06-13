@@ -27,33 +27,43 @@
   </div>
 </section>
 
+{{ $research := (where .Site.RegularPages "Section" "research").ByWeight }}
+{{ if gt (len $research) 0 }}
 <section id="research" class="content-section">
   {{ partial "section-heading.html" (dict "eyebrow" "Focus and publications" "title" "Research" "page" "research") }}
   <div class="entry-list" aria-label="Research items">
-    {{ range (where .Site.RegularPages "Section" "research").ByWeight }}
+    {{ range first 4 $research }}
       {{ partial "entry-card.html" (dict "page" . "section" "research") }}
     {{ end }}
   </div>
 </section>
+{{ end }}
 
+{{ $projects := (where .Site.RegularPages "Section" "projects").ByWeight }}
+{{ if gt (len $projects) 0 }}
 <section id="projects" class="content-section">
   {{ partial "section-heading.html" (dict "eyebrow" "Selected work" "title" "Projects" "page" "projects") }}
   <div class="entry-list" aria-label="Project items">
-    {{ range (where .Site.RegularPages "Section" "projects").ByWeight }}
+    {{ range first 4 $projects }}
       {{ partial "entry-card.html" (dict "page" . "section" "projects") }}
     {{ end }}
   </div>
 </section>
+{{ end }}
 
+{{ $blogs := (where .Site.RegularPages "Section" "blog").ByDate.Reverse }}
+{{ if gt (len $blogs) 0 }}
 <section id="blog" class="content-section">
   {{ partial "section-heading.html" (dict "eyebrow" "Recent notes" "title" "Blog" "page" "blog") }}
   <div class="entry-list" aria-label="Blog posts">
-    {{ range (where .Site.RegularPages "Section" "blog").ByDate.Reverse }}
+    {{ range $blogs }}
       {{ partial "entry-card.html" (dict "page" . "section" "blog") }}
     {{ end }}
   </div>
 </section>
+{{ end }}
 
+{{ if and $data.experience (gt (len $data.experience) 0) }}
 <section id="experience" class="content-section">
   {{ partial "section-heading.html" (dict "eyebrow" "Work and research" "title" "Experience" "page" "experience") }}
   {{ range $data.experience }}
@@ -72,7 +82,9 @@
     </article>
   {{ end }}
 </section>
+{{ end }}
 
+{{ if and $data.skills (gt (len $data.skills) 0) }}
 <section id="skills" class="content-section">
   {{ partial "section-heading.html" (dict "eyebrow" "Tools and technologies" "title" "Skills" "page" "skills") }}
   {{ range $data.skills }}
@@ -82,24 +94,16 @@
     </div>
   {{ end }}
 </section>
+{{ end }}
 
+{{ if and $data.education (gt (len $data.education) 0) }}
 <section id="education" class="content-section">
   {{ partial "section-heading.html" (dict "eyebrow" "Academic background" "title" "Education" "page" "education") }}
   {{ range $data.education }}
-    <article class="entry">
-      <div class="entry-date">{{ .start }} - {{ .end }}</div>
-      <div class="entry-body">
-        <h3>{{ .degree }} <span>/ {{ .institution }}</span></h3>
-        {{ with .location }}<p class="entry-meta">{{ . }}</p>{{ end }}
-        <ul class="detail-list">
-          {{ range .details }}
-            <li>{{ . }}</li>
-          {{ end }}
-        </ul>
-      </div>
-    </article>
+    {{ partial "education-entry.html" . }}
   {{ end }}
 </section>
+{{ end }}
 
 <section id="contact" class="content-section contact-section">
   {{ partial "section-heading.html" (dict "eyebrow" "Contact" "title" "Get in touch" "page" "contact") }}

@@ -11,8 +11,19 @@
 
     <nav class="top-nav" aria-label="Primary navigation">
       {{ range $data.nav }}
-        {{ $isActive := and (in $activeSections .id) (eq $currentKey .id) }}
-        <a href="{{ printf "%s/" .id | relURL }}"{{ if $isActive }} class="is-active" aria-current="page"{{ end }}>{{ if $isActive }}[{{ .label }}]{{ else }}{{ .label }}{{ end }}</a>
+        {{ $shouldShow := true }}
+        {{ if eq .id "research" }}
+          {{ $shouldShow = gt (len (where $.Site.RegularPages "Section" "research")) 0 }}
+        {{ else if eq .id "projects" }}
+          {{ $shouldShow = gt (len (where $.Site.RegularPages "Section" "projects")) 0 }}
+        {{ else if eq .id "blog" }}
+          {{ $shouldShow = gt (len (where $.Site.RegularPages "Section" "blog")) 0 }}
+        {{ end }}
+        
+        {{ if $shouldShow }}
+          {{ $isActive := and (in $activeSections .id) (eq $currentKey .id) }}
+          <a href="{{ printf "%s/" .id | relURL }}"{{ if $isActive }} class="is-active" aria-current="page"{{ end }}>{{ if $isActive }}[{{ .label }}]{{ else }}{{ .label }}{{ end }}</a>
+        {{ end }}
       {{ end }}
     </nav>
 
