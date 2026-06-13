@@ -45,7 +45,7 @@
   {{ partial "section-heading.html" (dict "eyebrow" "Selected work" "title" "Projects" "page" "projects") }}
   <div class="entry-list" aria-label="Project items">
     {{ range first 4 $projects }}
-      {{ partial "entry-card.html" (dict "page" . "section" "projects") }}
+      {{ partial "entry-card.html" (dict "page" . "section" "projects" "isHome" true) }}
     {{ end }}
   </div>
 </section>

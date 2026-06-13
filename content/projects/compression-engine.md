@@ -1,6 +1,6 @@
 ---
 title: Compression Engine
-date: 2025-01-02
+date: 2025-06-07
 weight: 20
 featured: true
 description: A lossless compression engine built from scratch in Go, progressing from Huffman coding and LZSS to DEFLATE and Gzip.

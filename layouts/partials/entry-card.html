@@ -20,7 +20,21 @@
       {{ end }}
     </div>
   {{ else if eq $section "projects" }}
-    <div class="entry-date">{{ if $page.Params.featured }}Featured{{ else }}Project{{ end }}</div>
+    {{ $latestYear := 0 }}
+    {{ range (where site.RegularPages "Section" "projects") }}
+      {{ $year := .Date.Format "2006" | int }}
+      {{ if gt $year $latestYear }}
+        {{ $latestYear = $year }}
+      {{ end }}
+    {{ end }}
+    {{ $pageYear := $page.Date.Format "2006" | int }}
+    {{ $dateText := "" }}
+    {{ if eq $pageYear $latestYear }}
+      {{ $dateText = $page.Date.Format "Jan 2006" }}
+    {{ else }}
+      {{ $dateText = $page.Date.Format "2006" }}
+    {{ end }}
+    <div class="entry-date">{{ $dateText }}</div>
     <div class="entry-body">
       <h3><a href="{{ $page.RelPermalink }}">{{ $page.Title }}{{ if $showArrow }} <span class="entry-title-arrow" aria-hidden="true">↗</span>{{ end }}</a></h3>
       {{ with $summary }}<p>{{ . }}</p>{{ end }}

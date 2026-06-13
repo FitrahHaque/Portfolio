@@ -1,6 +1,6 @@
 ---
 title: Distributed Lock Service
-date: 2025-01-01
+date: 2025-02-16
 weight: 10
 featured: true
 description: A fault-tolerant distributed locking service built from scratch in Go, using Raft consensus to coordinate exclusive access across a cluster.
