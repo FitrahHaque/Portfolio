@@ -3,8 +3,8 @@ title: TubeCast
 date: 2025-07-04
 weight: 5
 featured: true
-description: Turn YouTube channels into personal podcast shows. Listen ad-free in your favourite podcast app with the display off, and share your cloud-hosted shows with loved ones, all for free.
-summary: Turn YouTube channels into personal podcast shows. Listen ad-free in your favourite podcast app with the display off, and share your cloud-hosted shows with loved ones, all for free.
+description: Turn YouTube channels into personal podcast shows. Listen to YouTube content ad-free in your favourite podcast app with the display off, and share your cloud-hosted shows with loved ones, all for free.
+summary: Turn YouTube channels into personal podcast shows. Listen to YouTube content ad-free in your favourite podcast app with the display off, and share your cloud-hosted shows with loved ones, all for free.
 stack:
   - Go
   - TUI
