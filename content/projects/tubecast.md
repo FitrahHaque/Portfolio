@@ -91,6 +91,11 @@ The setup inside a podcast app is simple: choose **Follow a Show by URL**, paste
 
 I built a terminal user interface (TUI) for the normal workflow. It provides interactive screens for browsing shows, creating a show, subscribing to a channel, synchronizing subscriptions, adding episodes, and deleting shows. Long-running conversions display a modal while the media pipeline works.
 
+<video controls playsinline>
+  <source src="/Portfolio/projects/tubecast/demo.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
+
 The repository also includes shell scripts that wrap the Docker Compose commands. Someone using the packaged version can initialize TubeCast and perform the common operations with commands such as `create-show.sh`, `sync-channel.sh`, `add-video.sh`, and `sync.sh` without knowing the application's internal command structure.
 
 Docker packages the Go application with the external tools it depends on, while mounted volumes preserve show metadata, covers, generated feeds, and Internet Archive credentials between runs.

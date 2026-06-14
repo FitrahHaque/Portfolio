@@ -856,6 +856,23 @@ h3 span {
   background: rgba(230, 237, 240, .96);
 }
 
+.post-content video {
+  width: 100%;
+  height: auto;
+  margin: .35rem 0 .65rem;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.35);
+  transition: border-color .14s ease, box-shadow .14s ease;
+}
+
+.post-content video:hover {
+  border-color: var(--accent);
+  box-shadow: 0 6px 32px rgba(146, 216, 231, 0.12);
+}
+
+
 .post-content .phone-gallery {
   display: flex;
   align-items: flex-start;
