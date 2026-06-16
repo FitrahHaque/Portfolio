@@ -28,7 +28,7 @@ I believe that almost everything I learn finds a way to become useful later, eve
 I value clarity, correctness, and maintainability. I do not believe in "Clean Code" as dogma, but I do believe in clear business logic. Simplicity is what I try to achieve in my work, although it rarely comes easily. I appreciate the value of collaboration, but I also have a deep sense of ownership over what I build.
 
 ## Beyond Work
-I spend a lot of my time running and watching movies. I run every week as a hobby jogger, and you can follow me on [Strava](https://strava.app.link/5ijnh8QQW3b). I also love going to the theater, with *Interstellar* being my favorite. I keep a log of what I watch on [Letterboxd](https://letterboxd.com/ihtemad/).
+I have recently dicovered a new hobby of running. I am enjoying it A LOT!! You can follow me on [Strava](https://strava.app.link/5ijnh8QQW3b). And Obviously my guilty pleasure is watching movies, especially in the theatre. I keep a log of what I watch on [Letterboxd](https://letterboxd.com/ihtemad/).
 
 
 <div class="about-closing">

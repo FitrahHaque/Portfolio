@@ -21,6 +21,8 @@ links:
     href: https://github.com/FitrahHaque/TubeCast
   - label: Demo Feed
     href: https://archive.org/download/fitrahhaque_tubecast/bloop.xml
+  - label: Run Package (.zip)
+    href: https://drive.google.com/file/d/1CN6A85aoMsvUGzq6nQH12d6jPMYPStn3/view?usp=drive_link
 ---
 
 ## Overview
